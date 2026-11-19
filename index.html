@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Legal Groove | Derecho para artistas y proyectos creativos</title>
+  <meta name="description" content="Asesoramiento legal para artistas, DJs, productores, sellos y proyectos creativos en Argentina. Marcas, derechos de autor, contratos y propiedad intelectual.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="Legal Groove — Create. Manage. Protect.">
+  <meta property="og:description" content="Derecho para artistas, DJs, productores, sellos y proyectos creativos. Marcas, derechos de autor y contratos.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:ital,wdth,wght@0,50..125,100..900;1,50..125,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css">
+  <script>
+    (function (root, loc) {
+      root.classList.add('js');
+      try {
+        // vista previa: ?motion=on muestra las animaciones aunque el sistema pida menos movimiento (?motion=off lo deshace)
+        var m = new URLSearchParams(loc.search).get('motion');
+        if (m === 'on' || m === 'off') localStorage.setItem('lg-motion', m);
+        if (localStorage.getItem('lg-motion') === 'on') root.classList.add('force-motion');
+      } catch (e) { /* sin storage */ }
+      // la copia de prueba en github.io no se ofrece a los buscadores; el sitio en su dominio, sí
+      if (/\.github\.io$/i.test(loc.hostname)) {
+        var robots = document.querySelector('meta[name="robots"]');
+        if (robots) robots.setAttribute('content', 'noindex,nofollow');
+      }
+      // bienvenida: no se muestra si se llega con un ancla (#contacto) o con ?intro=off
+      if (!loc.hash && !/[?&]intro=off/.test(loc.search)) {
+        root.classList.add('is-welcome');
+        // si la consola no llegara a cargar, el sitio se muestra igual
+        setTimeout(function () { if (!root.classList.contains('has-console')) root.classList.remove('is-welcome'); }, 4000);
+      }
+    })(document.documentElement, location);
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LegalService",
+        "name": "Legal Groove",
+        "slogan": "Create. Manage. Protect.",
+        "description": "Asesoramiento jurídico para artistas, productores y proyectos creativos en Argentina.",
+        "areaServed": { "@type": "Country", "name": "Argentina" },
+        "availableLanguage": ["es", "en"],
+        "knowsAbout": ["Propiedad intelectual", "Derechos de autor", "Registro de marcas", "Contratos para artistas", "Industria musical"],
+        "founder": { "@id": "#vanina" },
+        "logo": "assets/logo-line.svg",
+        "email": "contacto@legalgroove.com.ar",
+        "telephone": "+54 9 11 2554-3087",
+        "sameAs": ["https://www.instagram.com/legalgroove.ar/"]
+      },
+      { "@type": "Person", "@id": "#vanina", "name": "Vanina Iud Novillo", "jobTitle": "Abogada y Agente de la Propiedad Industrial" },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "¿Tengo que registrar una canción en DNDA o en SADAIC?", "acceptedAnswer": { "@type": "Answer", "text": "Son instancias diferentes y pueden ser complementarias. La DNDA registra la obra y deja constancia de autoría; SADAIC administra derechos de autor de obras musicales dentro de su ámbito. La estrategia depende de la obra, su etapa y la forma de explotación." } },
+          { "@type": "Question", "name": "¿Puedo registrar mi nombre artístico como marca?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, siempre que cumpla los requisitos de registrabilidad y no exista un antecedente que lo impida o dificulte. Antes de presentar la solicitud conviene analizar antecedentes y definir las clases adecuadas." } },
+          { "@type": "Question", "name": "¿Puedo usar un sample de otra canción?", "acceptedAnswer": { "@type": "Answer", "text": "El uso puede involucrar derechos sobre la composición y sobre el fonograma. Que el fragmento sea breve o esté modificado no elimina automáticamente la necesidad de autorización." } },
+          { "@type": "Question", "name": "¿Qué diferencia hay entre la composición y el master?", "acceptedAnswer": { "@type": "Answer", "text": "La composición es la obra musical. El master es una grabación concreta de esa obra. Pueden pertenecer a personas distintas y generar derechos distintos." } },
+          { "@type": "Question", "name": "¿Qué es un split sheet?", "acceptedAnswer": { "@type": "Answer", "text": "Es un documento que deja asentados los aportes y porcentajes acordados entre quienes participaron en la composición. Conviene firmarlo antes del registro y del lanzamiento." } }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<!-- El español es el texto de este archivo. El inglés está en assets/site.js (STRINGS.en),
+     enlazado por las claves data-i18n / data-i18n-attr. -->
+<body class="theme-dark">
+  <a class="skip" href="#contenido" data-i18n="skip">Saltar al contenido</a>
+
+  <header class="top" data-top>
+    <div class="top__in">
+      <div class="top__left">
+        <p class="top__meta mono"><span class="beat" aria-hidden="true"></span><span class="top__meta-text" data-i18n="meta">Derecho · Música · Comunidad</span></p>
+        <a class="top__brand" href="#inicio" aria-label="Legal Groove — inicio" data-i18n-attr="aria-label:brand.home"><img src="assets/logo-line.svg" alt="" width="1439" height="277"></a>
+      </div>
+
+      <div class="top__right">
+        <nav class="top__nav mono" aria-label="Principal" data-i18n-attr="aria-label:nav.label">
+          <a href="#servicios" data-i18n="nav.services">Servicios</a>
+          <a href="#preguntas" data-i18n="nav.faq">Preguntas</a>
+          <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+        </nav>
+
+        <!-- Silenciar: corta el sonido de la consola sin frenar los discos. -->
+        <button class="mute" type="button" data-mute aria-pressed="false" aria-label="Silenciar" data-i18n-attr="aria-label:mute">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3.6 9.6h3.2l4.7-3.9v12.6l-4.7-3.9H3.6z"/>
+            <path class="mute__waves" d="M15 9.4a3.7 3.7 0 0 1 0 5.2M17.4 7a7 7 0 0 1 0 10"/>
+            <path class="mute__cross" d="M15.6 9.6l4.8 4.8m0-4.8l-4.8 4.8"/>
+          </svg>
+        </button>
+
+        <!-- Bandeja de idiomas: dos vinilos y un crossfader. La perilla se mueve libre;
+             el idioma cambia recién al soltarla. Apretar un disco lo frena (scratch). -->
+        <div class="deck" data-deck>
+          <div class="deck__platter" data-platter="es" aria-hidden="true">
+            <svg class="deck__vinyl" viewBox="-50 -50 100 100" focusable="false">
+              <circle r="49" fill="#0d0d0d" stroke="#fff" stroke-opacity=".38"/>
+              <g fill="none" stroke="#fff" stroke-opacity=".13" stroke-width=".8"><circle r="45"/><circle r="41.5"/><circle r="38"/><circle r="34.5"/><circle r="31"/></g>
+              <path d="M-12.6-43A44.8 44.8 0 0 1 12.6-43" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round"/>
+              <path d="M38-9.5A39.2 39.2 0 0 1 38 9.5" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".9" stroke-linecap="round"/>
+              <clipPath id="deck-ar"><circle r="25"/></clipPath>
+              <g clip-path="url(#deck-ar)">
+                <rect x="-25" y="-25" width="50" height="50" fill="#fff"/>
+                <rect x="-25" y="-25" width="50" height="16.7" fill="#74acdf"/>
+                <rect x="-25" y="8.3" width="50" height="16.7" fill="#74acdf"/>
+                <circle r="5" fill="#f6b40e"/>
+              </g>
+              <circle r="25" fill="none" stroke="#000" stroke-opacity=".45"/>
+              <circle r="1.8" fill="#0d0d0d"/>
+            </svg>
+          </div>
+
+          <div class="deck__fader" data-fader role="slider" tabindex="0" aria-orientation="horizontal"
+               aria-label="Idioma" data-i18n-attr="aria-label:deck.label"
+               aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" aria-valuetext="Español">
+            <span class="deck__labels" aria-hidden="true"><span>ES</span><span>EN</span></span>
+            <span class="deck__track" aria-hidden="true"></span>
+            <span class="deck__knob" aria-hidden="true"></span>
+          </div>
+
+          <div class="deck__platter" data-platter="en" aria-hidden="true">
+            <svg class="deck__vinyl" viewBox="-50 -50 100 100" focusable="false">
+              <circle r="49" fill="#0d0d0d" stroke="#fff" stroke-opacity=".38"/>
+              <g fill="none" stroke="#fff" stroke-opacity=".13" stroke-width=".8"><circle r="45"/><circle r="41.5"/><circle r="38"/><circle r="34.5"/><circle r="31"/></g>
+              <path d="M-12.6-43A44.8 44.8 0 0 1 12.6-43" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round"/>
+              <path d="M38-9.5A39.2 39.2 0 0 1 38 9.5" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".9" stroke-linecap="round"/>
+              <clipPath id="deck-us"><circle r="25"/></clipPath>
+              <g clip-path="url(#deck-us)">
+                <rect x="-25" y="-25" width="50" height="50" fill="#fff"/>
+                <g fill="#b22234"><rect x="-25" y="-25" width="50" height="7.15"/><rect x="-25" y="-10.7" width="50" height="7.15"/><rect x="-25" y="3.6" width="50" height="7.15"/><rect x="-25" y="17.85" width="50" height="7.15"/></g>
+                <rect x="-25" y="-25" width="25" height="28.6" fill="#3c3b6e"/>
+                <g fill="#fff"><circle cx="-10.5" cy="-17" r="1.2"/><circle cx="-4.5" cy="-17" r="1.2"/><circle cx="-16.5" cy="-11" r="1.2"/><circle cx="-10.5" cy="-11" r="1.2"/><circle cx="-4.5" cy="-11" r="1.2"/><circle cx="-16.5" cy="-5" r="1.2"/><circle cx="-10.5" cy="-5" r="1.2"/><circle cx="-4.5" cy="-5" r="1.2"/><circle cx="-13.5" cy="0.5" r="1.2"/><circle cx="-7.5" cy="0.5" r="1.2"/></g>
+              </g>
+              <circle r="25" fill="none" stroke="#000" stroke-opacity=".45"/>
+              <circle r="1.8" fill="#0d0d0d"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <!-- ============ Inicio ============ -->
+    <!-- Las dos «O» de GROOVE son discos (los arma assets/console.js). Arriba del logo va la
+         pantalla con una pista por disco; debajo, los controles de la consola. -->
+    <section class="hero" id="inicio" data-hero>
+      <div class="hero__lockup">
+        <!-- Música: cada pista toma su archivo de data-audio (el disco A es la pista 1, la que suena al entrar).
+             Si junto al audio hay un .json con el mismo nombre, de ahí salen la onda y el tempo; si no, se
+             calculan leyendo el archivo. Para fijar el tempo a mano: data-bpm="128". Sin data-audio, ese
+             disco queda en silencio. Para publicar, los archivos necesitan permiso de uso. -->
+        <div class="screen" aria-hidden="true">
+          <div class="lane" data-lane="a" data-audio="assets/audio/dare.m4a"><span class="lane__id mono">A</span><canvas></canvas><span class="leds"></span></div>
+          <div class="lane" data-lane="b" data-audio="assets/audio/music-is-the-answer.m4a"><span class="lane__id mono">B</span><canvas></canvas><span class="leds"></span></div>
+        </div>
+        <div class="hero__mark" role="img" aria-label="Legal Groove, marca registrada" data-i18n-attr="aria-label:hero.mark" data-hero-mark>
+          <!-- el logo de una línea (escritorio) y el apilado (móvil) van en línea: console.js convierte sus dos «O» en discos -->
+          <div class="wordmark wordmark--line"><!--LOGO:line--><svg aria-hidden="true" focusable="false" viewBox="0 0 1438.64 276.83" fill="currentColor" fill-rule="evenodd"><path class="lg-l lg-l" style="--i:0" d="M 71.42 0.02 L 0 276.77 L 92.69 276.77 L 98.76 253.27 L 42.36 253.27 L 107.72 0.02 L 71.42 0.02 Z"/><path class="lg-l lg-e" style="--i:1" d="M 182.43 0.02 L 111.01 276.77 L 203.55 276.77 L 209.61 253.27 L 153.44 253.27 L 180.84 147.1 L 226.33 147.1 L 232.19 124.38 L 186.35 124.38 L 212.33 23.73 L 265.78 23.73 L 271.91 0.02 L 182.43 0.02 Z"/><path class="lg-l lg-g" style="--i:2" d="M 277.51 60.03 L 228.17 251.26 C 224.08 267.08 231.93 276.77 248.81 276.77 L 298.93 276.77 C 314.88 276.77 326.82 268.38 330.35 254.69 L 361.44 134.2 L 312.02 134.2 L 306.8 154.43 L 306.84 154.44 C 306.04 157.9 305.88 157.78 311.85 157.94 C 316.64 158.06 317.22 158.15 317.45 158.77 C 317.61 159.18 317.59 159.25 315.82 166.24 L 315.79 166.23 L 295.88 243.38 L 295.82 243.36 C 294.26 249.12 292.79 251.18 289.23 252.63 C 287.01 253.53 271.37 253.58 269.73 252.7 C 266.07 250.72 265.98 248.38 269.15 236.61 L 269 236.57 L 321.71 32.3 C 323.48 25.45 326.08 23.73 334.69 23.73 L 343.72 23.73 C 349.71 23.73 351.49 26.76 349.67 33.82 L 332.94 98.65 L 370 98.65 L 388.82 25.7 C 392.93 9.78 385.72 0.02 369.84 0.02 L 325.85 0.02 L 325.85 0.13 C 308.83 0.3 308.87 0.3 304.73 1.61 C 301.78 2.55 299.5 3.8 297.02 5.83 C 290.7 11.01 288.5 15.17 285.41 27.74 C 284.87 29.94 283.52 35.34 282.4 39.74 C 281.29 44.14 279.01 53.25 277.34 59.99 L 277.51 60.03 Z"/><path class="lg-l lg-a" style="--i:3" d="M 468.95 0.02 L 338.56 276.77 L 372 276.77 L 458.12 83.61 L 442.87 276.77 L 478.08 276.77 L 491.05 0.02 L 468.95 0.02 Z"/><path class="lg-l lg-l" style="--i:4" d="M 559.28 0.02 L 487.87 276.77 L 580.27 276.77 L 586.33 253.27 L 530.12 253.27 L 595.47 0.02 L 559.28 0.02 Z"/><path class="lg-l lg-g" style="--i:5" d="M 715.19 23.48 L 656.33 251.56 C 652.29 267.22 659.61 276.83 675.61 276.83 L 726.29 276.83 C 741.33 276.83 752.93 269.05 756.81 256.37 L 759.26 248.35 L 788.09 136.63 L 739.23 136.63 L 735.17 152.36 L 735.19 152.36 C 733.19 160.23 733.37 159.21 733.85 159.7 C 734.18 160.02 735 160.09 738.91 160.09 C 743.13 160.09 743.63 160.13 744.16 160.56 L 744.74 161.03 L 744.68 161.02 L 723.43 243.38 C 721.6 250.46 718.54 253.49 713.21 253.49 L 699.53 253.49 C 696.08 253.49 693.55 249.94 694.47 246.39 L 748.67 36.35 C 751.37 25.89 753.84 23.28 761.04 23.28 L 770.79 23.28 C 778.58 23.28 779.88 25.82 777.26 35.96 L 760.64 100.36 L 797.64 100.36 L 816.86 25.88 C 821 9.83 814.16 0 798.87 0 L 744.38 0 C 730.04 0 718.94 8.92 715.19 23.48 Z"/><path class="lg-l lg-r" style="--i:6" d="M 847.39 0 L 775.96 276.83 L 812.78 276.83 L 837.82 179.79 L 837.82 179.79 C 842.03 162.7 842.08 162.55 843.05 162.11 C 843.87 161.73 861.7 161.71 863.4 162.08 C 867.47 162.97 868.73 166.59 867.08 172.6 L 867.18 172.63 L 840.3 276.83 L 877.25 276.83 L 901.64 182.3 L 901.52 182.27 C 904.45 170.97 904.71 169.65 904.71 166.03 C 904.72 159.48 902.66 155.62 897.72 152.89 C 895.09 151.44 895.09 151.13 897.68 150.29 C 903.97 148.27 909.45 143.27 912.48 136.79 C 913.99 133.56 914.12 133.14 917.62 119.56 L 917.62 119.56 L 942.05 24.9 C 946.04 9.46 939.04 0 923.65 0 L 847.39 0 Z M 878.14 23.28 L 848.34 138.76 L 866.74 138.76 C 872.19 138.76 876.41 135.35 877.84 129.79 L 902.51 34.19 C 904.76 25.46 903.28 23.28 895.08 23.28 L 878.14 23.28 Z"/><path class="lg-l lg-o" style="--i:7" d="M 965.95 20.63 L 906.92 249.37 C 901.96 268.59 908.98 276.83 930.33 276.83 L 975.9 276.83 C 993.88 276.83 1003.65 268.85 1008.45 250.24 L 1066.65 24.7 C 1070.6 9.38 1063.59 0 1048.21 0 L 993.85 0 C 981.38 0 968.89 9.23 965.95 20.63 Z M 998.99 35.01 L 944.9 244.64 C 943.48 250.13 945.39 253.49 949.93 253.49 L 961.96 253.49 C 968.83 253.49 971.12 251.26 973.43 242.3 L 1028.14 30.28 C 1029.14 26.41 1026.5 23.28 1022.25 23.28 L 1011.31 23.28 C 1003.88 23.28 1001.41 25.63 998.99 35.01 Z"/><path class="lg-l lg-o" style="--i:8" d="M 1092.16 21.99 L 1032.72 252.33 C 1028.8 267.52 1036.97 276.83 1054.23 276.83 L 1099.35 276.83 C 1119.49 276.83 1130.11 269.13 1134.74 251.17 L 1192.27 28.27 C 1197.37 8.48 1190.99 0 1171.01 0 L 1121.37 0 C 1106.78 0 1095.68 8.36 1092.16 21.99 Z M 1126.75 30.59 L 1071.39 245.11 C 1070.05 250.31 1072.13 253.49 1076.87 253.49 L 1087.87 253.49 C 1095.28 253.49 1097.74 251.16 1100.16 241.8 L 1154.49 31.24 C 1155.76 26.31 1153.59 23.28 1148.76 23.28 L 1136.08 23.28 C 1131.46 23.28 1127.92 26.06 1126.75 30.59 Z"/><path class="lg-l lg-v" style="--i:9" d="M 1217.59 0 L 1188.32 276.83 L 1222 276.83 L 1335.62 0 L 1300.03 0 L 1224.51 201.76 L 1252.42 0 L 1217.59 0 Z"/><path class="lg-l lg-e" style="--i:10" d="M 1313.4 132.87 L 1276.25 276.83 L 1363.51 276.83 L 1369.53 253.49 L 1317.98 253.49 L 1344.77 149.67 L 1388.99 149.67 L 1394.81 127.12 L 1350.95 127.12 L 1367.49 63.01 C 1372.62 43.15 1378.2 23.28 1378.66 23.28 L 1432.63 23.28 L 1438.64 0 L 1348.81 0 C 1348.19 0 1332.34 59.49 1313.4 132.87 Z"/></svg><!--/LOGO--></div>
+          <div class="wordmark wordmark--stacked"><!--LOGO:stacked--><svg aria-hidden="true" focusable="false" viewBox="0 0 786.35 578.93" fill="currentColor" fill-rule="evenodd"><path class="lg-l lg-l" style="--i:0" d="M 92.6 0 L 21.19 276.75 L 113.88 276.75 L 119.94 253.25 L 63.55 253.25 L 128.9 0 L 92.6 0 Z"/><path class="lg-l lg-e" style="--i:1" d="M 203.61 0 L 132.2 276.75 L 224.73 276.75 L 230.8 253.25 L 174.63 253.25 L 202.03 147.08 L 247.52 147.08 L 253.38 124.36 L 207.54 124.36 L 233.51 23.72 L 286.97 23.72 L 293.09 0 L 203.61 0 Z"/><path class="lg-l lg-g" style="--i:2" d="M 298.7 60.01 L 249.35 251.25 C 245.27 267.06 253.12 276.75 270 276.75 L 320.12 276.75 C 336.07 276.75 348 268.36 351.54 254.67 L 382.63 134.18 L 333.2 134.18 L 327.98 154.41 L 328.03 154.42 C 327.23 157.88 327.06 157.76 333.04 157.92 C 337.82 158.05 338.4 158.13 338.64 158.75 C 338.8 159.16 338.78 159.23 337.01 166.22 L 336.98 166.21 L 317.07 243.36 L 317 243.34 C 315.45 249.1 313.98 251.16 310.41 252.61 C 308.2 253.51 292.56 253.57 290.91 252.68 C 287.26 250.71 287.17 248.36 290.34 236.59 L 290.19 236.55 L 342.9 32.28 C 344.67 25.43 347.26 23.72 355.88 23.72 L 364.9 23.72 C 370.89 23.72 372.68 26.74 370.86 33.8 L 354.13 98.64 L 391.19 98.64 L 410.01 25.68 C 414.12 9.76 406.91 0 391.03 0 L 347.04 0 L 347.04 0.11 C 330.02 0.28 330.05 0.28 325.91 1.6 C 322.97 2.53 320.68 3.78 318.21 5.81 C 311.89 10.99 309.69 15.15 306.6 27.72 C 306.06 29.92 304.7 35.32 303.59 39.72 C 302.47 44.12 300.2 53.23 298.53 59.97 L 298.7 60.01 Z"/><path class="lg-l lg-a" style="--i:3" d="M 490.14 0 L 359.75 276.75 L 393.18 276.75 L 479.3 83.59 L 464.06 276.75 L 499.26 276.75 L 512.24 0 L 490.14 0 Z"/><path class="lg-l lg-l" style="--i:4" d="M 580.47 0 L 509.05 276.75 L 601.45 276.75 L 607.52 253.25 L 551.31 253.25 L 616.66 0 L 580.47 0 Z"/><path class="lg-l lg-g" style="--i:5" d="M 62.9 325.59 L 4.04 553.67 C 0 569.33 7.32 578.93 23.32 578.93 L 74 578.93 C 89.04 578.93 100.64 571.16 104.52 558.48 L 106.97 550.46 L 135.8 438.73 L 86.94 438.73 L 82.88 454.47 L 82.9 454.47 C 80.9 462.34 81.08 461.32 81.56 461.81 C 81.89 462.13 82.71 462.19 86.62 462.19 C 90.84 462.19 91.34 462.24 91.87 462.67 L 92.45 463.14 L 92.39 463.13 L 71.14 545.49 C 69.31 552.57 66.25 555.6 60.92 555.6 L 47.24 555.6 C 43.79 555.6 41.26 552.05 42.18 548.5 L 96.38 338.46 C 99.08 328 101.55 325.39 108.75 325.39 L 118.5 325.39 C 126.29 325.39 127.59 327.93 124.97 338.07 L 108.35 402.47 L 145.35 402.47 L 164.57 327.99 C 168.71 311.94 161.87 302.11 146.58 302.11 L 92.1 302.11 C 77.75 302.11 66.65 311.03 62.9 325.59 Z"/><path class="lg-l lg-r" style="--i:6" d="M 195.1 302.11 L 123.67 578.93 L 160.49 578.93 L 185.53 481.9 L 185.53 481.9 C 189.75 464.8 189.79 464.66 190.76 464.21 C 191.58 463.84 209.41 463.82 211.11 464.19 C 215.18 465.08 216.44 468.7 214.79 474.71 L 214.9 474.74 L 188.01 578.93 L 224.96 578.93 L 249.35 484.41 L 249.23 484.38 C 252.16 473.08 252.42 471.76 252.42 468.14 C 252.43 461.59 250.37 457.73 245.43 455 C 242.8 453.55 242.8 453.24 245.39 452.4 C 251.68 450.38 257.16 445.38 260.19 438.9 C 261.7 435.67 261.83 435.25 265.33 421.67 L 265.33 421.67 L 289.76 327.01 C 293.75 311.57 286.75 302.11 271.36 302.11 L 195.1 302.11 Z M 225.85 325.39 L 196.05 440.87 L 214.45 440.87 C 219.9 440.87 224.12 437.46 225.55 431.9 L 250.22 336.3 C 252.47 327.57 250.99 325.39 242.79 325.39 L 225.85 325.39 Z"/><path class="lg-l lg-o" style="--i:7" d="M 313.66 322.74 L 254.63 551.48 C 249.67 570.7 256.69 578.93 278.04 578.93 L 323.61 578.93 C 341.59 578.93 351.36 570.96 356.16 552.35 L 414.36 326.81 C 418.31 311.49 411.3 302.11 395.92 302.11 L 341.56 302.11 C 329.09 302.11 316.6 311.34 313.66 322.74 Z M 346.7 337.12 L 292.61 546.75 C 291.19 552.24 293.1 555.6 297.64 555.6 L 309.67 555.6 C 316.54 555.6 318.83 553.37 321.14 544.41 L 375.85 332.38 C 376.85 328.52 374.21 325.39 369.96 325.39 L 359.02 325.39 C 351.59 325.39 349.12 327.74 346.7 337.12 Z"/><path class="lg-l lg-o" style="--i:8" d="M 439.87 324.1 L 380.43 554.44 C 376.51 569.63 384.68 578.93 401.94 578.93 L 447.06 578.93 C 467.2 578.93 477.82 571.24 482.45 553.28 L 539.98 330.38 C 545.08 310.59 538.7 302.11 518.72 302.11 L 469.08 302.11 C 454.49 302.11 443.39 310.47 439.87 324.1 Z M 474.46 332.7 L 419.1 547.22 C 417.76 552.42 419.84 555.6 424.58 555.6 L 435.58 555.6 C 442.99 555.6 445.45 553.27 447.87 543.91 L 502.2 333.35 C 503.47 328.42 501.3 325.39 496.47 325.39 L 483.79 325.39 C 479.17 325.39 475.63 328.17 474.46 332.7 Z"/><path class="lg-l lg-v" style="--i:9" d="M 565.3 302.11 L 536.03 578.93 L 569.71 578.93 L 683.33 302.11 L 647.74 302.11 L 572.22 503.87 L 600.13 302.11 L 565.3 302.11 Z"/><path class="lg-l lg-e" style="--i:10" d="M 661.11 434.98 L 623.96 578.93 L 711.22 578.93 L 717.24 555.6 L 665.69 555.6 L 692.48 451.78 L 736.7 451.78 L 742.52 429.23 L 698.66 429.23 L 715.2 365.12 C 720.33 345.25 725.91 325.39 726.37 325.39 L 780.34 325.39 L 786.35 302.11 L 696.52 302.11 C 695.9 302.11 680.05 361.59 661.11 434.98 Z"/></svg><!--/LOGO--></div>
+          <span class="hero__reg" aria-hidden="true">®</span>
+        </div>
+        <p class="hero__tag tagline">Create. Manage. Protect.</p>
+
+        <div class="console" role="group" aria-label="Consola" data-i18n-attr="aria-label:con.label" data-console>
+          <div class="transport">
+            <button type="button" data-act="play" aria-pressed="false" aria-label="Reproducir" data-i18n-attr="aria-label:con.play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z"/></svg></button>
+            <button type="button" data-act="pause" aria-pressed="false" aria-label="Pausa" data-i18n-attr="aria-label:con.pause"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1h2.2v8H2zM5.8 1H8v8H5.8z"/></svg></button>
+            <button type="button" data-act="stop" aria-pressed="false" aria-label="Detener" data-i18n-attr="aria-label:con.stop"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 1.5h7v7h-7z"/></svg></button>
+          </div>
+          <label class="slider"><span class="mono">Vol A</span><input type="range" min="0" max="100" value="80" data-vol="a" aria-label="Volumen del disco A" data-i18n-attr="aria-label:con.vola"></label>
+          <label class="slider slider--cross"><span class="mono">A</span><input type="range" min="0" max="100" value="0" data-xfade aria-label="Mezcla entre los dos discos" data-i18n-attr="aria-label:con.cross"><span class="mono">B</span></label>
+          <label class="slider"><input type="range" min="0" max="100" value="80" data-vol="b" aria-label="Volumen del disco B" data-i18n-attr="aria-label:con.volb"><span class="mono">Vol B</span></label>
+          <p class="console__clock mono" aria-hidden="true">123 BPM · 4/4</p>
+        </div>
+      </div>
+
+      <!-- bienvenida: se entra al sitio con un botón grande de PLAY -->
+      <button class="enter" type="button" data-enter aria-label="Play: entrar al sitio" data-i18n-attr="aria-label:enter.label"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 0.5l8 4.5-8 4.5z"/></svg><span>Play</span></button>
+
+      <div class="hero__row">
+        <h1 class="hero__title" data-i18n="hero.title">Derecho para tu proyecto creativo.</h1>
+        <p class="hero__copy" data-i18n="hero.copy">Protegé tu música, tu nombre y los acuerdos detrás de lo que estás creando.</p>
+        <div class="hero__actions">
+          <a class="btn" href="#contacto"><span data-i18n="hero.cta">Contame tu proyecto</span> <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="link" href="#servicios" data-i18n="hero.services">Ver servicios</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Cinta ============ -->
+    <p class="sr-only" data-i18n="ticker.sr">Componelo, grabalo, firmalo, registralo, lanzalo, cobralo.</p>
+    <div class="ticker theme-light" aria-hidden="true">
+      <!-- la lista va dos veces para que el desplazamiento no tenga corte -->
+      <div class="ticker__run display">
+        <span data-i18n="ticker.1">Componelo</span><span data-i18n="ticker.2">Grabalo</span><span data-i18n="ticker.3">Firmalo</span><span data-i18n="ticker.4">Registralo</span><span data-i18n="ticker.5">Lanzalo</span><span data-i18n="ticker.6">Cobralo</span>
+        <span data-i18n="ticker.1">Componelo</span><span data-i18n="ticker.2">Grabalo</span><span data-i18n="ticker.3">Firmalo</span><span data-i18n="ticker.4">Registralo</span><span data-i18n="ticker.5">Lanzalo</span><span data-i18n="ticker.6">Cobralo</span>
+      </div>
+    </div>
+
+    <!-- ============ 01 Servicios ============ -->
+    <section class="sec services" id="servicios">
+      <div class="wrap">
+        <header class="sec__head">
+          <p class="mono sec__idx" data-i18n="svc.idx">01 — Servicios</p>
+          <h2 class="display sec__title" data-reveal data-i18n="svc.title">Marcas, música y contratos.</h2>
+          <p class="sec__copy" data-reveal style="--d:1" data-i18n="svc.copy">Asesoramiento pensado desde la lógica real de la industria creativa, con explicaciones claras y decisiones documentadas.</p>
+        </header>
+
+        <div class="strips">
+          <article class="strip" data-reveal>
+            <header class="strip__top"><span class="mono">CH 1</span><span class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></header>
+            <h3 class="display strip__name" data-i18n="svc.tm">Marcas</h3>
+            <ul class="strip__list">
+              <li data-i18n="svc.tm.1">Nombre artístico</li><li data-i18n="svc.tm.2">Sellos y productoras</li><li data-i18n="svc.tm.3">Fiestas y ciclos</li><li data-i18n="svc.tm.4">Antecedentes</li><li data-i18n="svc.tm.5">Registro ante INPI</li><li data-i18n="svc.tm.6">Oposiciones</li>
+            </ul>
+            <a class="link strip__go" href="#contacto" data-need="marca"><span data-i18n="svc.ask">Consultar</span><span class="sr-only" data-i18n="svc.tm.ask"> por marcas</span> <span class="arrow" aria-hidden="true">→</span></a>
+          </article>
+          <article class="strip" data-reveal style="--d:1">
+            <header class="strip__top"><span class="mono">CH 2</span><span class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></header>
+            <h3 class="display strip__name" data-i18n="svc.mu">Música</h3>
+            <ul class="strip__list">
+              <li>DNDA</li><li>SADAIC</li><li data-i18n="svc.mu.3">Obras musicales</li><li data-i18n="svc.mu.4">Fonogramas</li><li>Masters</li><li>Samples</li><li>Remixes</li><li data-i18n="svc.mu.8">Licencias</li>
+            </ul>
+            <a class="link strip__go" href="#contacto" data-need="musica"><span data-i18n="svc.ask">Consultar</span><span class="sr-only" data-i18n="svc.mu.ask"> por música y derechos de autor</span> <span class="arrow" aria-hidden="true">→</span></a>
+          </article>
+          <article class="strip" data-reveal style="--d:2">
+            <header class="strip__top"><span class="mono">CH 3</span><span class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></header>
+            <h3 class="display strip__name" data-i18n="svc.ct">Contratos</h3>
+            <ul class="strip__list">
+              <li data-i18n="svc.ct.1">Producción musical</li><li>Featuring</li><li>Remix</li><li>Management</li><li data-i18n="svc.ct.5">Servicios creativos</li><li data-i18n="svc.ct.6">Cesión y licencia</li><li>Split sheets</li>
+            </ul>
+            <a class="link strip__go" href="#contacto" data-need="contrato"><span data-i18n="svc.ask">Consultar</span><span class="sr-only" data-i18n="svc.ct.ask"> por contratos</span> <span class="arrow" aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 Preguntas ============ -->
+    <section class="sec questions" id="preguntas">
+      <div class="wrap questions__in">
+        <header class="sec__head">
+          <p class="mono sec__idx" data-i18n="faq.idx">02 — Preguntas frecuentes</p>
+          <h2 class="display sec__title" data-reveal data-i18n="faq.title">Entender también es proteger.</h2>
+        </header>
+        <div class="faq" data-reveal>
+          <details name="faq">
+            <summary><span class="mono q-num">Q1</span><span class="q-text" data-i18n="faq.q1">¿Tengo que registrar una canción en DNDA o en SADAIC?</span><span class="q-icon" aria-hidden="true"></span></summary>
+            <p class="answer" data-i18n="faq.a1">Son instancias diferentes y pueden ser complementarias. La DNDA registra la obra y deja constancia de autoría; SADAIC administra derechos de autor de obras musicales dentro de su ámbito. La estrategia depende de la obra, su etapa y la forma de explotación.</p>
+          </details>
+          <details name="faq">
+            <summary><span class="mono q-num">Q2</span><span class="q-text" data-i18n="faq.q2">¿Puedo registrar mi nombre artístico como marca?</span><span class="q-icon" aria-hidden="true"></span></summary>
+            <p class="answer" data-i18n="faq.a2">Sí, siempre que cumpla los requisitos de registrabilidad y no exista un antecedente que lo impida o dificulte. Antes de presentar la solicitud conviene analizar antecedentes y definir las clases adecuadas.</p>
+          </details>
+          <details name="faq">
+            <summary><span class="mono q-num">Q3</span><span class="q-text" data-i18n="faq.q3">¿Puedo usar un sample de otra canción?</span><span class="q-icon" aria-hidden="true"></span></summary>
+            <p class="answer" data-i18n="faq.a3">El uso puede involucrar derechos sobre la composición y sobre el fonograma. Que el fragmento sea breve o esté modificado no elimina automáticamente la necesidad de autorización.</p>
+          </details>
+          <details name="faq">
+            <summary><span class="mono q-num">Q4</span><span class="q-text" data-i18n="faq.q4">¿Qué diferencia hay entre la composición y el master?</span><span class="q-icon" aria-hidden="true"></span></summary>
+            <p class="answer" data-i18n="faq.a4">La composición es la obra musical. El master es una grabación concreta de esa obra. Pueden pertenecer a personas distintas y generar derechos distintos.</p>
+          </details>
+          <details name="faq">
+            <summary><span class="mono q-num">Q5</span><span class="q-text" data-i18n="faq.q5">¿Qué es un split sheet?</span><span class="q-icon" aria-hidden="true"></span></summary>
+            <p class="answer" data-i18n="faq.a5">Es un documento que deja asentados los aportes y porcentajes acordados entre quienes participaron en la composición. Conviene firmarlo antes del registro y del lanzamiento.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 Contacto ============ -->
+    <section class="sec contact" id="contacto">
+      <!-- los surcos del disco se dibujan desde site.js -->
+      <div class="record" aria-hidden="true">
+        <svg viewBox="-500 -500 1000 1000" data-record><g class="record__disc"></g></svg>
+      </div>
+      <div class="wrap">
+        <p class="mono sec__idx" data-i18n="ct.idx">03 — Contacto</p>
+        <h2 class="display contact__title" data-reveal data-i18n="ct.title">Protegé lo que estás creando.</h2>
+
+        <div class="contact__grid">
+          <div class="contact__side" data-reveal>
+            <p class="contact__copy" data-i18n="ct.copy">Contame brevemente de qué se trata. El formulario organiza la información para iniciar la consulta con un resumen claro.</p>
+            <ul class="channels">
+              <li><span class="mono">WhatsApp</span><a href="https://wa.me/5491125543087" target="_blank" rel="noopener">+54 9 11 2554-3087</a></li>
+              <li><span class="mono">Email</span><a href="mailto:contacto@legalgroove.com.ar">contacto@legalgroove.com.ar</a></li>
+              <li><span class="mono">Instagram</span><a href="https://www.instagram.com/legalgroove.ar/" target="_blank" rel="noopener">@legalgroove.ar</a></li>
+            </ul>
+            <p class="mono contact__human" data-i18n="ct.human">Sin bots ni respuestas automáticas — human after all.</p>
+          </div>
+
+          <form class="form" data-form data-reveal style="--d:1">
+            <div class="field"><label for="nombre" data-i18n="f.name">Nombre</label><input id="nombre" name="nombre" autocomplete="name" required placeholder="Tu nombre" data-i18n-attr="placeholder:f.name.ph"></div>
+            <div class="field"><label for="proyecto" data-i18n="f.project">Proyecto</label><input id="proyecto" name="proyecto" required placeholder="Artista, sello, productora, marca…" data-i18n-attr="placeholder:f.project.ph"></div>
+            <div class="field"><label for="necesidad" data-i18n="f.need">¿Qué necesitás?</label>
+              <div class="field__select"><select id="necesidad" name="necesidad" required>
+                <option value="" data-i18n="need.none">Seleccioná una opción</option>
+                <option value="marca" data-i18n="need.marca">Registro de marca</option>
+                <option value="musica" data-i18n="need.musica">Derechos de autor / música</option>
+                <option value="contrato" data-i18n="need.contrato">Contrato</option>
+                <option value="general" data-i18n="need.general">Asesoramiento general</option>
+              </select></div>
+            </div>
+            <div class="field"><label for="etapa" data-i18n="f.stage">Etapa del proyecto</label>
+              <div class="field__select"><select id="etapa" name="etapa">
+                <option value="inicio" data-i18n="stage.inicio">Estoy empezando</option>
+                <option value="activo" data-i18n="stage.activo">Ya está en actividad</option>
+                <option value="lanzamiento" data-i18n="stage.lanzamiento">Estoy por lanzar o firmar</option>
+                <option value="conflicto" data-i18n="stage.conflicto">Ya existe un conflicto</option>
+              </select></div>
+            </div>
+            <div class="field field--full"><label for="mensaje" data-i18n="f.more">Contame un poco más</label><textarea id="mensaje" name="mensaje" required placeholder="Qué pasó, qué querés hacer y si tenés una fecha importante" data-i18n-attr="placeholder:f.more.ph"></textarea></div>
+            <div class="form__actions">
+              <button class="btn" type="submit" data-via="whatsapp"><span data-i18n="f.wa">Enviar por WhatsApp</span> <span class="arrow" aria-hidden="true">→</span></button>
+              <button class="link" type="submit" data-via="mail" data-i18n="f.mail">Enviar por email</button>
+            </div>
+            <p class="form__status" aria-live="polite"><span data-status></span><button class="form__again" type="reset" data-again hidden>One more time ↺</button></p>
+            <p class="form__note" data-i18n="f.note">Al enviar se abre WhatsApp o tu correo con el resumen listo. Este sitio no guarda tus datos.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot__in">
+      <div class="foot__brand">
+        <img src="assets/logo-line.svg" alt="Legal Groove" width="1439" height="277">
+        <p data-i18n="foot.legal">Contenido informativo. Cada situación requiere un análisis jurídico particular.</p>
+      </div>
+      <div class="foot__meta mono">
+        <p>Vanina Iud Novillo<br><span data-i18n="foot.role">Abogada y Agente de la Propiedad Industrial</span></p>
+        <p><span data-i18n="meta">Derecho · Música · Comunidad</span><br>Argentina — <span data-year>2026</span></p>
+      </div>
+      <p class="foot__sleeve mono">
+        <span>LG—001</span><span data-i18n="foot.sides">Lado A / Lado B</span><span>33⅓ RPM</span><span>123 BPM</span><span data-i18n="foot.made">Hecho en Buenos Aires</span>
+        <svg class="foot__lambda" viewBox="0 0 151.95 277" aria-hidden="true"><path d="M129.96.13-.43 276.88H33l86.12-193.15-15.24 193.15h35.2L152.06.13Z"/></svg>
+      </p>
+    </div>
+  </footer>
+
+  <script src="assets/site.js" defer></script>
+  <script src="assets/console.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Material de trabajo: queda solo en esta computadora
+_originales/
+_plantilla_original/
+_variantes/
+_herramientas/
+LEGAL_GROOVE_WEB_HTML.zip
+WhatsApp Image*.jpeg
+.claude/settings.local.json
+
+# Música: no se publica hasta tener permiso de uso. Sin estos archivos el sitio
+# funciona igual, con la consola en silencio.
+assets/audio/
