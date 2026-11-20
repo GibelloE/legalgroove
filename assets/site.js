@@ -252,6 +252,56 @@
   }
 
   /* ==========================================================================
+     La mano sobre un disco
+     Con el mouse, o con el dedo sobre un disco grande, la mano lleva el punto
+     que toca: el disco gira lo que ese punto gira alrededor del centro. Con el
+     dedo sobre un disco chico eso no sirve: la yema tapa el centro y un par de
+     píxeles deciden para qué lado gira. Ahí la mano empuja una manija
+     imaginaria, a distancia fija del centro y a un costado del primer trazo:
+     hacia abajo o hacia la derecha el disco avanza, hacia arriba o hacia la
+     izquierda retrocede, y si la mano da vueltas el disco da vueltas con ella.
+     La usan esta bandeja y los discos del inicio (console.js).
+     ========================================================================== */
+  const hand = {
+    // Largo de la manija, en píxeles. Un círculo más chico que la manija no llega a darle la vuelta, y
+    // cuanto más larga, menos gira el disco con cada trazo: 30 es lo que dibuja un dedo sin esfuerzo.
+    LEVER: 30,
+    // cx, cy: el centro del disco · x, y: dónde apoya la mano · lever: largo de la manija (0: la mano lleva el punto que toca)
+    grab: (cx, cy, x, y, lever = 0) => ({ x, y, lever, hx: x - cx, hy: y - cy, set: !lever }),
+    // la mano pasó a (x, y): devuelve cuántos grados giró el disco
+    move(g, x, y) {
+      const dx = x - g.x, dy = y - g.y;
+      const len = Math.hypot(dx, dy);
+      if (!g.set) {
+        if (len < 4) return 0; // un dedo apoyado tiembla: hasta que no se mueve de verdad, el disco queda quieto
+        const side = (dy + 0.5 * dx > 0 ? g.lever : -g.lever) / len;
+        g.hx = dy * side;
+        g.hy = -dx * side;
+        g.set = true;
+      }
+      g.x = x;
+      g.y = y;
+      let turn;
+      if (g.lever) {
+        // La manija gira con el disco, sin cambiar de largo, hasta quedar detrás del movimiento. Para un
+        // tramo recto eso tiene solución exacta: el giro no depende de cada cuánto avisa la pantalla, y
+        // volver por el mismo camino deja el disco donde estaba.
+        const a = Math.atan2(dx * g.hy - dy * g.hx, dx * g.hx + dy * g.hy); // ángulo entre el movimiento y la manija
+        turn = 2 * Math.atan(Math.tan(a / 2) * Math.exp(-len / g.lever)) - a;
+        const c = Math.cos(turn), s = Math.sin(turn);
+        [g.hx, g.hy] = [g.hx * c - g.hy * s, g.hx * s + g.hy * c];
+      } else {
+        const nx = g.hx + dx, ny = g.hy + dy;
+        turn = Math.atan2(g.hx * ny - g.hy * nx, g.hx * nx + g.hy * ny);
+        g.hx = nx;
+        g.hy = ny;
+      }
+      return turn * 180 / Math.PI;
+    },
+  };
+  window.lgHand = hand;
+
+  /* ==========================================================================
      Bandeja de idiomas
      Dos vinilos (español / inglés) y un crossfader entre ambos. La perilla se
      puede mover de a poco; el idioma cambia recién al soltarla. Apretar un disco
@@ -270,7 +320,8 @@
       angle: Math.random() * 360,
       omega: reduce ? 0 : SPIN,
       held: false,
-      pointer: 0,   // ángulo del puntero en el último movimiento
+      grip: null,   // por dónde lo tiene agarrado la mano
+      finger: -1,   // y cuál de los punteros es esa mano
       push: 0,      // velocidad que trae la mano, para el envión al soltar
       moved: 0,     // cuándo fue el último movimiento
     }));
@@ -301,35 +352,33 @@
     };
     run();
 
-    const pointerAngle = (p, e) => {
-      const r = p.el.getBoundingClientRect();
-      return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI;
-    };
     platters.forEach(p => {
       p.el.addEventListener('pointerdown', e => {
         if (e.button) return;
+        const r = p.el.getBoundingClientRect();
+        // estos discos son más chicos que la yema de un dedo: con el dedo se llevan de la manija,
+        // apenas más larga que su radio para que un círculo alrededor del disco le dé la vuelta
+        p.grip = hand.grab(r.left + r.width / 2, r.top + r.height / 2, e.clientX, e.clientY, e.pointerType === 'touch' ? Math.min(hand.LEVER, r.width * 0.55) : 0);
+        p.finger = e.pointerId; // si se apoya otro dedo, el disco pasa a ese: el anterior deja de moverlo
         p.held = true;
         p.push = 0;
-        p.pointer = pointerAngle(p, e);
         p.moved = performance.now();
         p.el.classList.add('is-held');
         p.el.setPointerCapture(e.pointerId);
         run();
       });
       p.el.addEventListener('pointermove', e => {
-        if (!p.held) return;
-        const a = pointerAngle(p, e);
-        let delta = a - p.pointer;
-        if (delta > 180) delta -= 360; else if (delta < -180) delta += 360;
-        p.pointer = a;
+        if (!p.held || e.pointerId !== p.finger) return;
+        const delta = hand.move(p.grip, e.clientX, e.clientY);
+        if (!delta) return;
         p.angle += delta; // el disco sigue a la mano
         const now = performance.now();
         const ms = Math.max(8, now - p.moved);
         p.push = p.push * 0.6 + (delta / ms * 1000) * 0.4;
         p.moved = now;
       });
-      const release = () => {
-        if (!p.held) return;
+      const release = e => {
+        if (!p.held || e.pointerId !== p.finger) return;
         p.held = false;
         p.omega = clamp(p.push, -1400, 1400);
         p.el.classList.remove('is-held');

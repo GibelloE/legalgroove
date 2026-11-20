@@ -113,6 +113,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
    recorren los surcos (eso es el giro) y un eje rosa. Los grosores van en
    unidades del dibujo; el logo apilado se ve más chico y los lleva al doble. */
 .wordmark svg.has-vinyl { overflow: visible; }
+.wordmark svg.has-vinyl > path { pointer-events: none; } /* las letras no atajan el toque: lo que cae cerca de un disco es del disco */
 .vinyl__body { fill: #111; } /* console.js le pone encima un degradé suave, como el brillo de un vinilo */
 .vinyl__groove { fill: none; stroke: #fff; stroke-opacity: 0.4; stroke-width: 1.2; stroke-linejoin: round; }
 .vinyl__glint { fill: none; stroke: #fff; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
@@ -122,7 +123,8 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .vinyl__ring { fill: none; stroke: var(--pink); stroke-width: 4.5; }
 .vinyl__mark { fill: var(--pink); }
 .vinyl__cut { fill: var(--ink); }
-.vinyl__hit { fill: transparent; cursor: grab; touch-action: pan-y; }
+/* por dónde se agarra: en pantallas táctiles es más grande que el disco (console.js) y el dedo que cae ahí mueve el disco, no la página */
+.vinyl__hit { fill: transparent; cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent; }
 .vinyl.is-held .vinyl__hit { cursor: grabbing; }
 .wordmark--stacked .vinyl__groove { stroke-width: 2.4; }
 .wordmark--stacked .vinyl__groove--mid, .wordmark--stacked .vinyl__glint--mid { display: none; } /* en chico, un surco menos para que no se empasten */
@@ -201,6 +203,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 
 /* ---------- cabecera ---------- */
 .top {
+  --bar: 4.5rem; /* alto de la barra */
   position: fixed; inset: 0 0 auto; z-index: 50;
   transition: background-color 0.3s, box-shadow 0.3s, opacity 0.9s var(--ease);
 }
@@ -211,7 +214,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 }
 .top__in {
   display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
-  height: 4.5rem; padding-inline: var(--pad);
+  height: var(--bar); padding-inline: var(--pad);
 }
 .top__left { display: grid; align-items: center; }
 .top__left > * { grid-area: 1 / 1; transition: opacity 0.35s, transform 0.45s var(--ease), visibility 0.35s; }
@@ -258,7 +261,8 @@ html:not(.has-console) .mute, .no-audio .mute { display: none; } /* sin consola 
 .deck {
   --mix: 0;
   --knob: 0.75rem;
-  display: flex; align-items: center; gap: 0.5rem;
+  --between: 0.5rem; /* espacio entre discos y perilla */
+  display: flex; align-items: center; gap: var(--between);
   padding: 0.3rem; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 999px;
   background: rgba(255, 255, 255, 0.035);
   -webkit-user-select: none; user-select: none;
@@ -316,6 +320,17 @@ html:not(.has-console) .mute, .no-audio .mute { display: none; } /* sin consola 
 .deck.is-snapping .deck__knob { transition: left 0.3s var(--ease); }
 .deck.is-snapping .deck__platter { transition: filter 0.3s var(--ease), scale 0.18s var(--ease); }
 .deck.is-snapping .deck__labels span { transition: opacity 0.3s var(--ease); }
+/* En pantallas táctiles los discos y la perilla quedan chicos para un dedo: se agarran desde todo el
+   alto de la barra y, hacia los costados, hasta la mitad del espacio que los separa del vecino (el
+   disco de la derecha, hasta el borde de la pantalla). Es solo área de toque: no se ve. */
+@media (any-pointer: coarse) {
+  .deck__platter::before, .deck__fader::before {
+    content: ""; position: absolute;
+    inset: calc((100% - var(--bar)) / 2) calc(var(--between) / -2);
+  }
+  .deck__platter[data-platter="es"]::before { left: -0.4rem; }
+  .deck__platter[data-platter="en"]::before { right: calc(-0.3rem - 1px - min(var(--pad), 1.25rem)); }
+}
 
 /* mientras se mueve la perilla, la página baja de volumen; al soltar, vuelve */
 main, .foot { opacity: var(--lang-fade, 1); }
@@ -672,7 +687,7 @@ html.is-welcome { overflow: hidden; }
   .top__nav a:not(:last-child) { display: none; }
 }
 @media (max-width: 760px) {
-  .top__in { height: 4rem; }
+  .top { --bar: 4rem; }
   /* en pantallas angostas el logo va apilado y todo se alinea a la izquierda */
   .hero { padding-top: 4rem; }
   .wordmark--line { display: none; }
@@ -698,7 +713,7 @@ html.is-welcome { overflow: hidden; }
   /* a la marca le toca el ancho que dejan libre el silenciador y la bandeja (13,6rem entre los dos) */
   .top__in { gap: 0.75rem; }
   .top__brand { width: min(8.25rem, 100vw - 2 * var(--pad) - 13.6rem); }
-  .deck { gap: 0.375rem; }
+  .deck { --between: 0.375rem; }
   .mute { width: 2.5rem; }
   .mute + .deck { margin-left: calc(0.5rem - var(--gap)); }
   .deck__platter { width: 2.5rem; }

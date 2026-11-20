@@ -78,7 +78,8 @@
       home,
       omega: 0,
       held: false,
-      pointer: 0,
+      grip: null,               // por dónde lo tiene agarrado la mano
+      finger: -1,               // y cuál de los punteros es esa mano
       push: 0,
       moved: 0,
       level: 0,
@@ -287,14 +288,14 @@
       g.append(label, body, ...grooves, ...glints.map(x => x.node), edgeOut, edgeIn, hit);
       path.replaceWith(g);
       return {
-        deck: decks[n], g, body, grooves, grooveData, glints, turn, edgeOut, edgeIn, label, labelScale, cx: 0, cy: 0, hit,
+        deck: decks[n], g, body, grooves, grooveData, glints, turn, edgeOut, edgeIn, label, labelScale, cx: 0, cy: 0, hit, f: null, dOut: '',
         exact, exactOuter: exact.slice(0, cut), exactInner: exact.slice(cut),
         rhoO: radial(straighten(outer)), rhoI: radial(straighten(inner)),
         frame: { x: ox, y: oy, a, b, k: SLANT },
         start: { x: cx + (n ? sep : -sep), y: cy, a: R, b: R, k: 0 },
       };
     });
-    return { svg, platters };
+    return { svg, platters, W, scale: 0 };
   }).filter(Boolean);
   if (!instances.length) return;
   root.classList.add('has-console'); // desde acá la pantalla y los controles existen y se pueden medir
@@ -338,37 +339,87 @@
       p.body.setAttribute('d', settled ? p.exact : dOut + dIn);
       p.edgeOut.setAttribute('d', dOut);
       p.edgeIn.setAttribute('d', dIn);
-      p.hit.setAttribute('d', dOut);
+      p.f = f;
+      p.dOut = dOut;
       const rings = p.grooveData.map(gr => ringOf(f, gr.dirs, gr.rho.map(v => gr.round + (v - gr.round) * e)));
       p.grooves.forEach((node, i) => node.setAttribute('d', rings[i]));
       p.glints.forEach(x => x.node.setAttribute('d', rings[x.groove]));
       p.cx = f.x;
       p.cy = f.y;
     }));
+    zones();
   }
 
-  /* ---------- scratch: el disco sigue a la mano ---------- */
-  const angleFrom = (node, e) => {
-    const r = node.getBoundingClientRect();
-    return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI;
+  /* ---------- dónde se agarra cada disco ----------
+     Con mouse, el contorno exacto. En una pantalla táctil la «O» puede ser más
+     angosta que la yema del dedo, así que alrededor se le suma un margen que
+     no se ve: lo que le falte para ofrecer REACH.w × REACH.h a cada lado del
+     centro. Entre los dos discos el espacio se reparte por la mitad, así cada
+     toque va al disco que tiene más cerca. */
+  const touchy = matchMedia('(any-pointer: coarse)');
+  const REACH = { w: 52, h: 82, min: 6, maxW: 34, maxH: 26 }; // en píxeles de pantalla
+  function zones() {
+    instances.forEach(inst => {
+      const s = inst.scale; // píxeles por unidad del dibujo; 0 con mouse o si este logo no se ve
+      const [left, right] = inst.platters;
+      inst.platters.forEach((p, n) => {
+        const f = p.f;
+        if (!f) return;
+        if (!s) { p.hit.setAttribute('d', p.dOut); return; }
+        const hw = f.a + clamp(REACH.w / s - f.a, REACH.min / s, REACH.maxW / s);
+        const hh = f.b + clamp(REACH.h / s - f.b, REACH.min / s, REACH.maxH / s);
+        const mid = (left.f.x + right.f.x) / 2 - f.x; // la mitad del camino hacia el otro disco
+        const x0 = n ? Math.max(-hw, mid) : -hw, x1 = n ? hw : Math.min(hw, mid);
+        // un rectángulo de puntas redondas, recortado en esa mitad e inclinado igual que la «O»
+        const r = Math.min(hw, hh) * 0.6;
+        let path = '';
+        [[1, -1], [1, 1], [-1, 1], [-1, -1]].forEach(([sx, sy], corner) => {
+          for (let i = 0; i <= 6; i++) {
+            const a = (corner * 90 - 90 + i * 15) * Math.PI / 180;
+            const x = clamp(sx * (hw - r) + r * Math.cos(a), x0, x1), y = sy * (hh - r) + r * Math.sin(a);
+            path += (path ? 'L' : 'M') + (f.x + x - f.k * y).toFixed(1) + ' ' + (f.y + y).toFixed(1);
+          }
+        });
+        p.hit.setAttribute('d', path + 'Z');
+      });
+    });
+  }
+  // el margen se mide en píxeles: hay que rehacerlo cada vez que el logo cambia de tamaño (o se muestra el otro)
+  const measure = () => {
+    instances.forEach(inst => { inst.scale = touchy.matches ? inst.svg.getBoundingClientRect().width / inst.W : 0; });
+    zones();
   };
+  if ('ResizeObserver' in window) {
+    const watcher = new ResizeObserver(measure);
+    instances.forEach(inst => watcher.observe(inst.svg));
+  } else addEventListener('resize', measure);
+  if (touchy.addEventListener) touchy.addEventListener('change', measure);
+
+  /* ---------- scratch: el disco sigue a la mano ----------
+     Cómo se traduce el movimiento de la mano en giro está en site.js («La mano
+     sobre un disco»). Con el dedo, y mientras la «O» sea angosta, se la lleva
+     de la manija. */
+  const hand = window.lgHand;
+  const SMALL = 36; // medio ancho en píxeles: por debajo de esto, un dedo no distingue un lado del disco del otro
   instances.forEach(inst => inst.platters.forEach(p => {
     const k = p.deck;
     p.hit.addEventListener('pointerdown', e => {
       if (e.button) return;
+      const m = inst.svg.getScreenCTM();
+      if (!m) return;
+      const handle = e.pointerType === 'touch' && p.frame.a * Math.hypot(m.a, m.b) < SMALL;
+      k.grip = hand.grab(m.a * p.cx + m.c * p.cy + m.e, m.b * p.cx + m.d * p.cy + m.f, e.clientX, e.clientY, handle ? hand.LEVER : 0);
+      k.finger = e.pointerId; // si se apoya otro dedo, el disco pasa a ese: el anterior deja de moverlo
       k.held = true;
       k.push = 0;
-      k.pointer = angleFrom(p.g, e);
       k.moved = performance.now();
       p.g.classList.add('is-held');
       p.hit.setPointerCapture(e.pointerId);
     });
     p.hit.addEventListener('pointermove', e => {
-      if (!k.held) return;
-      const a = angleFrom(p.g, e);
-      let delta = a - k.pointer;
-      if (delta > 180) delta -= 360; else if (delta < -180) delta += 360;
-      k.pointer = a;
+      if (!k.held || e.pointerId !== k.finger) return;
+      const delta = hand.move(k.grip, e.clientX, e.clientY);
+      if (!delta) return;
       k.rot += delta;
       k.spin += delta;
       k.travel += delta;
@@ -376,8 +427,8 @@
       k.push = k.push * 0.6 + (delta / Math.max(8, now - k.moved) * 1000) * 0.4;
       k.moved = now;
     });
-    const release = () => {
-      if (!k.held) return;
+    const release = e => {
+      if (!k.held || e.pointerId !== k.finger) return;
       k.held = false;
       k.omega = clamp(k.push, -1400, 1400);
       p.g.classList.remove('is-held');
@@ -385,6 +436,9 @@
     p.hit.addEventListener('pointerup', release);
     p.hit.addEventListener('pointercancel', release);
     p.hit.addEventListener('lostpointercapture', release);
+    // el dedo que arranca sobre un disco es del disco: la página no lo toma como desplazamiento
+    // (lo pide también touch-action en el CSS; esto es para los navegadores que no lo aplican a un SVG)
+    ['touchstart', 'touchmove'].forEach(type => p.hit.addEventListener(type, e => { if (e.cancelable) e.preventDefault(); }, { passive: false }));
   }));
 
   /* ---------- pantalla: una pista y un vúmetro por disco ---------- */
