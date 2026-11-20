@@ -474,9 +474,6 @@ html.is-welcome { overflow: hidden; }
 .enter:hover, .enter:focus-visible { scale: 1.04; }
 .enter:hover svg, .enter:focus-visible svg { transform: translateX(0.07em); }
 .is-welcome.is-ready .enter { opacity: 1; visibility: visible; }
-/* con menos movimiento no hay viaje de la consola al logo: la marca se funde a negro y vuelve ya
-   convertida (el fundido está al final, junto a las reglas de menos movimiento) */
-.is-dipping .hero__mark { opacity: 0; }
 
 /* ---------- cinta ---------- */
 .ticker { overflow: hidden; padding-block: clamp(0.9rem, 1.7vw, 1.5rem); }
@@ -768,10 +765,14 @@ html.is-welcome { overflow: hidden; }
 
 /* ---------- menos movimiento ----------
    Si el sistema lo pide, todo queda quieto. La clase .force-motion solo se
-   activa a pedido (?motion=on) para poder revisar las animaciones. */
+   activa a pedido (?motion=on) para poder revisar las animaciones.
+   La excepción es la bienvenida: mientras dura (is-intro, la pone console.js)
+   el freno no se aplica, porque la consola que se transforma en el logo al
+   apretar PLAY se decidió mostrarla animada siempre. Lo que se mueve solo
+   (la cinta, el pulso) sigue quieto también ahí. */
 @media (prefers-reduced-motion: reduce) {
   html:not(.force-motion) { scroll-behavior: auto; }
-  html:not(.force-motion) *, html:not(.force-motion) *::before, html:not(.force-motion) *::after {
+  html:not(.force-motion):not(.is-intro) *, html:not(.force-motion):not(.is-intro) *::before, html:not(.force-motion):not(.is-intro) *::after {
     animation-duration: 0.001ms !important;
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
@@ -780,10 +781,4 @@ html.is-welcome { overflow: hidden; }
   }
   html:not(.force-motion) .beat { animation: none; }
   html:not(.force-motion) .ticker__run { animation: none; }
-  /* Lo único que se anima igual: el fundido con el que la consola de la bienvenida pasa a ser el
-     logo y aparece el inicio. Nada se desplaza. */
-  html:not(.force-motion) .hero__mark, html:not(.force-motion) .screen, html:not(.force-motion) .hero__tag,
-  html:not(.force-motion) .console, html:not(.force-motion) .hero__row, html:not(.force-motion) .hero__reg {
-    transition: opacity 0.3s ease !important;
-  }
 }

@@ -964,8 +964,8 @@
      apretarlo arranca la música, los discos empiezan a girar y la consola se
      transforma en el logo; cuando termina, aparece el sitio.
      Clases en <html>: is-welcome (el sitio todavía no se ve), is-ready (el
-     botón está a la vista), is-forming (la consola ya se está transformando)
-     e is-live (el sitio).
+     botón está a la vista), is-forming (la consola ya se está transformando),
+     is-live (el sitio) e is-intro (toda la secuencia, de principio a fin).
      ========================================================================== */
   const welcome = root.classList.contains('is-welcome');
   const gated = [$('.top'), $('.hero__row', hero), $('[data-console]', hero), ...$$('main > :not([data-hero])'), $('.foot')].filter(Boolean);
@@ -977,24 +977,20 @@
     root.classList.add('is-forming', 'is-live');
     root.classList.remove('is-welcome', 'is-ready');
     gated.forEach(node => { node.inert = false; });
+    setTimeout(() => root.classList.remove('is-intro'), 1500); // cuando ya terminó de aparecer el sitio
   };
-  /* `played`: se entró con el botón de PLAY. Es un pedido expreso de reproducir, así que los discos
-     giran y la música suena también cuando el sistema pide menos movimiento. En ese caso lo que
-     no hay es viaje de la consola al logo: la marca se funde a negro (is-dipping, en site.css) y
-     vuelve ya convertida. Entrando de otra forma (scroll, teclado), con menos movimiento el sitio
-     queda en pausa. */
-  const DIP = 300; // milisegundos que tarda ese fundido
+  /* La transformación de la consola en logo se ve animada siempre, también cuando el sistema pide
+     menos movimiento: así se decidió para este sitio (mientras dura, la clase is-intro levanta en
+     site.css el freno a las animaciones). Lo que no se mueve solo con esa preferencia es lo demás:
+     los discos no derivan en la bienvenida y, si se entra sin apretar PLAY (scroll, teclado), el
+     sitio queda en pausa. `played`: se entró con el botón de PLAY, que es un pedido expreso de
+     reproducir; ahí la música suena y los discos giran en cualquier caso. */
   const enter = played => {
     if (entered) return;
     entered = true;
     root.classList.remove('is-ready'); // el botón se va
     setTransport(played || !reduce ? 'play' : 'pause');
     prime();
-    if (reduce) {
-      root.classList.add('is-dipping');
-      setTimeout(() => { goLive(); root.classList.remove('is-dipping'); }, DIP);
-      return;
-    }
     intro.from = intro.t + (played ? HOLD : 0);
     intro.forming = false;
     intro.done = false; // sigue en frame()
@@ -1015,6 +1011,7 @@
   } else {
     gated.forEach(node => { node.inert = true; });
     setTransport('pause');
+    root.classList.add('is-intro'); // hasta que el sitio termine de aparecer (ver goLive)
     shape(0);
     centreRig();
     // el botón aparece un cuadro después, para que entre en fundido
