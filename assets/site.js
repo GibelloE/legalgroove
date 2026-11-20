@@ -136,6 +136,8 @@
       'foot.role': 'Attorney and Industrial Property Agent',
       'foot.sides': 'Side A / Side B',
       'foot.made': 'Made in Buenos Aires',
+      'foot.music': 'Music',
+      'foot.edited': 'converted to AAC',
     },
   };
 

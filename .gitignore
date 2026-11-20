@@ -7,6 +7,13 @@ LEGAL_GROOVE_WEB_HTML.zip
 WhatsApp Image*.jpeg
 .claude/settings.local.json
 
-# Música: no se publica hasta tener permiso de uso. Sin estos archivos el sitio
-# funciona igual, con la consola en silencio.
-assets/audio/
+# Música. Este repositorio es público: acá solo entran los temas cuya licencia permite
+# publicarlos, nombrados uno por uno (sus créditos están en assets/audio/CREDITOS.txt).
+# Todo lo demás que haya en esa carpeta queda solo en esta computadora; las grabaciones
+# comerciales no se pueden publicar sin permiso de sus dueños.
+assets/audio/*
+!assets/audio/CREDITOS.txt
+!assets/audio/edm-detection-mode.m4a
+!assets/audio/edm-detection-mode.json
+!assets/audio/funky-house.m4a
+!assets/audio/funky-house.json

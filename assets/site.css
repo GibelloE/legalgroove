@@ -654,12 +654,20 @@ html.is-welcome { overflow: hidden; }
 .foot__brand p { margin-top: 1.1rem; max-width: 26rem; font-size: 0.82rem; color: var(--muted); }
 .foot__meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; color: var(--muted); }
 /* créditos como en la contratapa de un disco */
+.foot__back { grid-column: 1 / -1; display: grid; gap: 1rem; }
 .foot__sleeve {
-  grid-column: 1 / -1;
   display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.75rem;
   color: var(--muted); opacity: 0.7;
 }
 .foot__lambda { width: 0.6rem; margin-left: auto; fill: var(--pink); }
+/* la música de las bandejas, como la lista de temas: es un crédito que pide la licencia, así que va
+   con el gris entero (sin la transparencia de la línea de arriba) y con los enlaces subrayados */
+.foot__tracks { display: flex; flex-wrap: wrap; gap: 0.35rem 1.75rem; color: var(--muted); }
+.foot__tracks ul { display: grid; gap: 0.35rem; min-width: 0; }
+.foot__tracks li { display: flex; gap: 0.9rem; }
+.foot__tracks a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; transition: color 0.2s var(--ease); }
+.foot__tracks a[rel~="license"] { white-space: nowrap; } /* «CC BY 4.0» no se parte en dos renglones */
+.foot__tracks a:hover, .foot__tracks a:focus-visible { color: var(--pink); }
 
 /* ---------- aparición al hacer scroll ---------- */
 .js [data-reveal] {

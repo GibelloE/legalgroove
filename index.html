@@ -160,10 +160,12 @@
         <!-- Música: cada pista toma su archivo de data-audio (el disco A es la pista 1, la que suena al entrar).
              Si junto al audio hay un .json con el mismo nombre, de ahí salen la onda y el tempo; si no, se
              calculan leyendo el archivo. Para fijar el tempo a mano: data-bpm="128". Sin data-audio, ese
-             disco queda en silencio. Para publicar, los archivos necesitan permiso de uso. -->
+             disco queda en silencio. Para publicar, los archivos necesitan permiso de uso: los dos de ahora
+             tienen licencia libre. Si se cambian, hay que cambiar también su crédito en el pie de página
+             y en assets/audio/CREDITOS.txt, y sumar los archivos nuevos a la lista de .gitignore. -->
         <div class="screen" aria-hidden="true">
-          <div class="lane" data-lane="a" data-audio="assets/audio/dare.m4a"><span class="lane__id mono">A</span><canvas></canvas><span class="leds"></span></div>
-          <div class="lane" data-lane="b" data-audio="assets/audio/music-is-the-answer.m4a"><span class="lane__id mono">B</span><canvas></canvas><span class="leds"></span></div>
+          <div class="lane" data-lane="a" data-audio="assets/audio/edm-detection-mode.m4a"><span class="lane__id mono">A</span><canvas></canvas><span class="leds"></span></div>
+          <div class="lane" data-lane="b" data-audio="assets/audio/funky-house.m4a"><span class="lane__id mono">B</span><canvas></canvas><span class="leds"></span></div>
         </div>
         <div class="hero__mark" role="img" aria-label="Legal Groove, marca registrada" data-i18n-attr="aria-label:hero.mark" data-hero-mark>
           <!-- el logo de una línea (escritorio) y el apilado (móvil) van en línea: console.js convierte sus dos «O» en discos -->
@@ -343,10 +345,22 @@
         <p>Vanina Iud Novillo<br><span data-i18n="foot.role">Abogada y Agente de la Propiedad Industrial</span></p>
         <p><span data-i18n="meta">Derecho · Música · Comunidad</span><br>Argentina — <span data-year>2026</span></p>
       </div>
-      <p class="foot__sleeve mono">
-        <span>LG—001</span><span data-i18n="foot.sides">Lado A / Lado B</span><span>33⅓ RPM</span><span>123 BPM</span><span data-i18n="foot.made">Hecho en Buenos Aires</span>
-        <svg class="foot__lambda" viewBox="0 0 151.95 277" aria-hidden="true"><path d="M129.96.13-.43 276.88H33l86.12-193.15-15.24 193.15h35.2L152.06.13Z"/></svg>
-      </p>
+      <div class="foot__back">
+        <p class="foot__sleeve mono">
+          <span>LG—001</span><span data-i18n="foot.sides">Lado A / Lado B</span><span>33⅓ RPM</span><span>123 BPM</span><span data-i18n="foot.made">Hecho en Buenos Aires</span>
+          <svg class="foot__lambda" viewBox="0 0 151.95 277" aria-hidden="true"><path d="M129.96.13-.43 276.88H33l86.12-193.15-15.24 193.15h35.2L152.06.13Z"/></svg>
+        </p>
+        <!-- La música de las bandejas. La licencia del tema A (CC BY 4.0) pide este crédito a la vista: autor,
+             enlace al tema, licencia y aviso de que el archivo se modificó. El del tema B (dominio público) es
+             cortesía. Los datos completos están en assets/audio/CREDITOS.txt. -->
+        <div class="foot__tracks mono">
+          <p data-i18n="foot.music">Música</p>
+          <ul>
+            <li><span>A</span><span><a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500026" target="_blank" rel="noopener">EDM Detection Mode</a> — Kevin MacLeod (incompetech.com) · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener license">CC BY 4.0</a> · <span data-i18n="foot.edited">convertido a AAC</span></span></li>
+            <li><span>B</span><span><a href="https://opengameart.org/content/funky-house" target="_blank" rel="noopener">Funky House</a> — Of Far Different Nature · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener license">CC0</a> · <span data-i18n="foot.edited">convertido a AAC</span></span></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </footer>
 

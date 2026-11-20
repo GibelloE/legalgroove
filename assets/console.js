@@ -501,7 +501,7 @@
   // tempo aproximado de una pista: se buscan los golpes graves (el bombo) y cada cuánto se repiten.
   // Un pulso verdadero se repite también cada 2 y cada 4 tiempos; eso descarta los ritmos intermedios.
   function tempo(pcm) {
-    const sr = pcm.sampleRate, hopSec = 0.005, hop = Math.round(sr * hopSec);
+    const sr = pcm.sampleRate, hop = Math.round(sr * 0.005), hopSec = hop / sr; // el salto real, ya redondeado a muestras enteras
     const data = pcm.getChannelData(0);
     const from = Math.floor(pcm.length * 0.2), to = Math.min(pcm.length, from + sr * 150);
     const n = Math.floor((to - from) / hop);
