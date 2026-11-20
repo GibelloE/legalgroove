@@ -1,8 +1,9 @@
 /* Legal Groove — la consola del inicio
    Las dos «O» de GROOVE son discos: giran, se frenan con la mano y se pueden
    arrastrar (scratch). Arriba del logo hay una pista por disco y sus vúmetros;
-   abajo, transporte, volúmenes y crossfader. Al entrar al sitio, una bandeja
-   de DJ se transforma en el logo.
+   abajo, transporte, volúmenes y crossfader. La bienvenida es una consola de
+   DJ con esos mismos discos: al darle PLAY arranca la música y la consola se
+   transforma en el logo.
 
    Cada disco toca el archivo que indica su pista en el HTML (data-audio). Si
    no hay archivo, la pista es generada: 123 BPM en 4/4, distinta en cada
@@ -224,6 +225,14 @@
   const LABEL_RATIO = 0.22; // la etiqueta da una vuelta cada ~8 s cuando el disco va a 33⅓
   const glintRnd = seeded(7);
   let sheens = 0;
+  // la marca de la consola de la bienvenida es el logotipo de una línea, en chico: se copian sus
+  // letras ahora, antes de que las dos «O» pasen a ser discos
+  const brandSvg = $('.wordmark--line svg', hero);
+  const brand = brandSvg && {
+    w: +brandSvg.getAttribute('viewBox').split(/\s+/)[2],
+    h: +brandSvg.getAttribute('viewBox').split(/\s+/)[3],
+    letters: $$('path', brandSvg).map(p => p.getAttribute('d')),
+  };
   const instances = $$('.wordmark svg', hero).map(svg => {
     const [, , W, H] = svg.getAttribute('viewBox').split(/\s+/).map(Number);
     const paths = $$('path.lg-o', svg);
@@ -238,8 +247,8 @@
     const cx = W / 2, cy = H / 2;
     const R = Math.min(H * 0.62, W * 0.155); // puede salirse del alto del logo: el SVG no recorta
     const sep = R * 1.62;
-    const rig = buildRig(cx, cy, sep, R);
-    svg.insertBefore(rig, svg.firstChild);
+    const rig = buildRig(cx, cy, sep, R, stackedLogo);
+    svg.insertBefore(rig[0], svg.firstChild);
 
     const platters = paths.map((path, n) => {
       const exact = path.getAttribute('d');
@@ -295,31 +304,67 @@
         start: { x: cx + (n ? sep : -sep), y: cy, a: R, b: R, k: 0 },
       };
     });
-    return { svg, platters, W, scale: 0 };
+    svg.appendChild(rig[1]); // los brazos van por encima de los discos
+    return { svg, platters, W, scale: 0, rig, cx, cy, sep, R, dx: 0, dy: 0 };
   }).filter(Boolean);
   if (!instances.length) return;
   root.classList.add('has-console'); // desde acá la pantalla y los controles existen y se pueden medir
 
-  function buildRig(cx, cy, sep, R) {
-    const g = el('g', { class: 'rig' });
-    const add = (name, attrs) => g.appendChild(el(name, attrs));
-    const half = sep + R + R * 0.34;
-    add('rect', { x: cx - half, y: cy - R * 1.2, width: half * 2, height: R * 2.4, rx: R * 0.16 });
-    [-1, 1].forEach(side => {
-      const px = cx + side * sep;
-      add('circle', { cx: px, cy, r: R * 1.07 });
-      // brazo
-      add('circle', { cx: px + R * 0.86, cy: cy - R * 0.9, r: R * 0.07 });
-      add('path', { d: `M${px + R * 0.86} ${cy - R * 0.9}L${px + R * 0.62} ${cy - R * 0.2}l${-R * 0.1} ${R * 0.12}` });
+  /* La consola de la bienvenida, en línea fina. Dos bandejas iguales (plato con sus puntos de
+     estroboscopio y brazo con contrapeso, a la derecha como en una bandeja de verdad) y, entre
+     ellas, el mezclador: perillas, vúmetro, un fader por canal y el crossfader. Abajo, donde un
+     equipo lleva la marca del fabricante, va el logotipo. Las medidas están en radios de plato.
+     Devuelve dos capas: la consola, que va detrás de los discos, y los brazos, que van encima. */
+  function buildRig(cx, cy, sep, R, small) {
+    const base = el('g', { class: 'rig' }), top = el('g', { class: 'rig rig--top' });
+    let g = base;
+    const n = v => +v.toFixed(1);
+    const X = u => n(cx + u * R), Y = v => n(cy + v * R), L = v => n(v * R);
+    const add = (name, attrs, cls) => {
+      const node = el(name, attrs);
+      if (cls) node.setAttribute('class', cls);
+      return g.appendChild(node);
+    };
+    const box = (u, v, w, h, cls) => add('rect', { x: X(u - w / 2), y: Y(v - h / 2), width: L(w), height: L(h) }, cls);
+    const s = sep / R, half = s + 1.34;
+    // el cuerpo, con un tornillo en cada esquina
+    add('rect', { x: X(-half), y: Y(-1.2), width: L(half * 2), height: L(2.5), rx: L(0.16) });
+    [-1, 1].forEach(sx => [-1.03, 1.13].forEach(v => add('circle', { cx: X(sx * (half - 0.17)), cy: Y(v), r: L(0.032) })));
+    [-s, s].forEach(p => {
+      // plato: el borde y, por fuera, los puntos del estroboscopio
+      g = base;
+      add('circle', { cx: X(p), cy: Y(0), r: L(1.07) });
+      const around = 2 * Math.PI * 1.135 * R / (small ? 48 : 60);
+      add('circle', { cx: X(p), cy: Y(0), r: L(1.135), 'stroke-dasharray': `0.01 ${(around - 0.01).toFixed(2)}` }, 'rig__dots');
+      // brazo: del pivote a la cápsula apoyada en el disco, con el contrapeso asomando por detrás
+      g = top;
+      const ax = p + 0.86, ay = -0.9;
+      add('path', { d: `M${X(ax)} ${Y(ay)}L${X(p + 0.62)} ${Y(-0.2)}` }, 'rig__arm');
+      add('path', { d: `M${X(p + 0.62)} ${Y(-0.2)}L${X(p + 0.53)} ${Y(-0.09)}` }, 'rig__heavy');
+      add('path', { d: `M${X(ax + 0.035)} ${Y(ay - 0.1)}L${X(ax + 0.07)} ${Y(ay - 0.2)}` }, 'rig__heavy');
+      add('circle', { cx: X(ax), cy: Y(ay), r: L(0.085) }, 'rig__cap');
     });
-    // mezclador entre los dos platos
-    const m = Math.max(R * 0.12, sep - R * 1.2);
-    add('path', { d: `M${cx - m * 0.5} ${cy - R * 0.62}V${cy + R * 0.3}M${cx + m * 0.5} ${cy - R * 0.62}V${cy + R * 0.3}M${cx - m} ${cy + R * 0.72}H${cx + m}` });
-    add('rect', { x: cx - m * 0.5 - R * 0.07, y: cy - R * 0.3, width: R * 0.14, height: R * 0.1 });
-    add('rect', { x: cx + m * 0.5 - R * 0.07, y: cy - R * 0.05, width: R * 0.14, height: R * 0.1 });
-    add('rect', { x: cx - R * 0.05, y: cy + R * 0.65, width: R * 0.1, height: R * 0.14 });
-    [-1, 0, 1].forEach(i => add('circle', { cx: cx + i * m * 0.8, cy: cy - R * 0.88, r: R * 0.06 }));
-    return g;
+    g = base;
+    // mezclador: tres perillas, cada una apuntando a un lado distinto
+    [[-0.34, -0.9], [0, 0.4], [0.34, 1.1]].forEach(([u, turn]) => {
+      add('circle', { cx: X(u), cy: Y(-0.9), r: L(0.07) });
+      add('path', { d: `M${X(u)} ${Y(-0.9)}L${X(u + 0.07 * Math.sin(turn))} ${Y(-0.9 - 0.07 * Math.cos(turn))}` });
+    });
+    // un fader por canal y, en el medio, el vúmetro (el segmento de arriba, encendido)
+    add('path', { d: `M${X(-0.3)} ${Y(-0.66)}V${Y(0.16)}M${X(0.3)} ${Y(-0.66)}V${Y(0.16)}` });
+    box(-0.3, -0.36, 0.18, 0.09, 'rig__cap');
+    box(0.3, -0.07, 0.18, 0.09, 'rig__cap');
+    for (let i = 0; i < 6; i++) add('path', { d: `M${X(-0.05)} ${Y(-0.6 + i * 0.14)}H${X(0.05)}` }, i ? 'rig__heavy' : 'rig__heavy rig__hot');
+    // crossfader
+    add('path', { d: `M${X(-0.42)} ${Y(0.5)}H${X(0.42)}` });
+    box(0, 0.5, 0.1, 0.17, 'rig__cap');
+    // la marca (en el celular la consola es chica: ahí el logotipo ocupa un poco más para que se lea)
+    if (brand) {
+      const wide = (small ? 1.62 : 1.5) * R, k = wide / brand.w;
+      const mark = add('g', { transform: `translate(${n(cx - wide / 2)} ${n(cy + R - brand.h * k / 2)}) scale(${k.toFixed(4)})` }, 'rig__brand');
+      brand.letters.forEach(dAttr => mark.appendChild(el('path', { d: dAttr })));
+    }
+    return [base, top];
   }
 
   // m = 0: platos redondos en la bandeja · m = 1: las «O» en su lugar
@@ -384,14 +429,47 @@
       });
     });
   }
+  /* Dónde va la consola de la bienvenida. De lado a lado, centrada en la ventana y no en el logo
+     (que deja a su derecha el lugar de la ®): así queda alineada con el botón de PLAY. De arriba
+     abajo, en el lugar del logo, salvo en pantallas bajas, donde sube lo necesario para no quedar
+     pegada al botón. Se acomoda solo mientras está quieta; una vez que empieza a transformarse,
+     los platos ya salieron de ahí. */
+  const playButton = $('[data-enter]', hero);
+  function centreRig() {
+    if (morph !== 0) return;
+    let moved = false;
+    const page = hero.getBoundingClientRect(); // el ancho útil de la página, sin la barra de desplazamiento
+    instances.forEach(inst => {
+      const box = inst.svg.getBoundingClientRect();
+      if (!box.width) return;
+      const s = box.width / inst.W; // píxeles por unidad del dibujo
+      const dx = (page.left + page.width / 2 - (box.left + box.width / 2)) / s;
+      const top = box.top + (inst.cy - 1.2 * inst.R) * s, bottom = box.top + (inst.cy + 1.3 * inst.R) * s; // el cuerpo de la consola
+      let lift = 0;
+      if (playButton) {
+        const room = playButton.getBoundingClientRect().top - Math.max(20, 0.12 * (bottom - top));
+        lift = clamp(bottom - room, 0, Math.max(0, top - 10));
+      }
+      const dy = -lift / s;
+      if (Math.abs(dx - inst.dx) < 0.5 && Math.abs(dy - inst.dy) < 0.5) return;
+      inst.dx = dx;
+      inst.dy = dy;
+      inst.rig.forEach(g => g.setAttribute('transform', `translate(${dx.toFixed(1)} ${dy.toFixed(1)})`));
+      inst.platters.forEach((p, n) => { p.start.x = inst.cx + (n ? inst.sep : -inst.sep) + dx; p.start.y = inst.cy + dy; });
+      moved = true;
+    });
+    if (moved) shape(0);
+  }
   // el margen se mide en píxeles: hay que rehacerlo cada vez que el logo cambia de tamaño (o se muestra el otro)
   const measure = () => {
     instances.forEach(inst => { inst.scale = touchy.matches ? inst.svg.getBoundingClientRect().width / inst.W : 0; });
     zones();
+    centreRig();
   };
   if ('ResizeObserver' in window) {
     const watcher = new ResizeObserver(measure);
     instances.forEach(inst => watcher.observe(inst.svg));
+    addEventListener('resize', centreRig); // si cambia solo el alto de la ventana, el logo no se entera pero el botón sí se mueve
   } else addEventListener('resize', measure);
   if (touchy.addEventListener) touchy.addEventListener('change', measure);
 
@@ -773,19 +851,23 @@
   const beatDot = $('.top .beat');
   let heroVisible = true;
   if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; }).observe(hero);
-  // la bienvenida avanza cuadro a cuadro: si la pestaña está en segundo plano, espera
-  const intro = { t: 0, from: -1, done: true };
+  /* El paso de consola a logo, que arranca al entrar: primero los discos toman velocidad sobre la
+     consola (HOLD), después los platos viajan hasta volverse las «O» (MORPH) y recién ahí aparece
+     el sitio. Avanza cuadro a cuadro: si la pestaña está en segundo plano, espera. */
+  const HOLD = 0.45, MORPH = 1.9;
+  const intro = { t: 0, from: 0, forming: false, done: true };
+  let goLive = () => {}; // se define con la bienvenida, más abajo
   let last = performance.now();
   const frame = now => {
     const dt = clamp((now - last) / 1000, 0.001, 0.05);
     last = now;
     if (!intro.done) {
       intro.t += dt;
-      if (intro.from < 0 && intro.t > 1.1) { intro.from = intro.t; root.classList.add('is-forming'); }
-      if (intro.from >= 0) {
-        const m = clamp((intro.t - intro.from) / 1.9, 0, 1);
+      if (!intro.forming && intro.t >= intro.from) { intro.forming = true; root.classList.add('is-forming'); }
+      if (intro.forming) {
+        const m = clamp((intro.t - intro.from) / MORPH, 0, 1);
         shape(m);
-        if (m >= 1) { intro.done = true; root.classList.add('is-ready'); }
+        if (m >= 1) goLive();
       }
     }
     const gains = [Math.cos(xfade * Math.PI / 2), Math.sin(xfade * Math.PI / 2)];
@@ -878,24 +960,44 @@
   }
 
   /* ==========================================================================
-     Bienvenida: la bandeja se transforma en el logo y queda en pausa hasta que
-     se entra al sitio con el botón de play.
+     Bienvenida: una consola de DJ en pausa, con el botón grande de PLAY. Al
+     apretarlo arranca la música, los discos empiezan a girar y la consola se
+     transforma en el logo; cuando termina, aparece el sitio.
+     Clases en <html>: is-welcome (el sitio todavía no se ve), is-ready (el
+     botón está a la vista), is-forming (la consola ya se está transformando)
+     e is-live (el sitio).
      ========================================================================== */
   const welcome = root.classList.contains('is-welcome');
   const gated = [$('.top'), $('.hero__row', hero), $('[data-console]', hero), ...$$('main > :not([data-hero])'), $('.foot')].filter(Boolean);
   let entered = !welcome;
 
-  const enter = () => {
-    if (entered) return;
-    entered = true;
+  goLive = () => {
     intro.done = true;
     shape(1);
-    root.classList.add('is-forming', 'is-ready');
-    root.classList.remove('is-welcome');
-    root.classList.add('is-live');
+    root.classList.add('is-forming', 'is-live');
+    root.classList.remove('is-welcome', 'is-ready');
     gated.forEach(node => { node.inert = false; });
-    setTransport(reduce ? 'pause' : 'play'); // al entrar, los discos arrancan
+  };
+  /* `played`: se entró con el botón de PLAY. Es un pedido expreso de reproducir, así que los discos
+     giran y la música suena también cuando el sistema pide menos movimiento. En ese caso lo que
+     no hay es viaje de la consola al logo: la marca se funde a negro (is-dipping, en site.css) y
+     vuelve ya convertida. Entrando de otra forma (scroll, teclado), con menos movimiento el sitio
+     queda en pausa. */
+  const DIP = 300; // milisegundos que tarda ese fundido
+  const enter = played => {
+    if (entered) return;
+    entered = true;
+    root.classList.remove('is-ready'); // el botón se va
+    setTransport(played || !reduce ? 'play' : 'pause');
     prime();
+    if (reduce) {
+      root.classList.add('is-dipping');
+      setTimeout(() => { goLive(); root.classList.remove('is-dipping'); }, DIP);
+      return;
+    }
+    intro.from = intro.t + (played ? HOLD : 0);
+    intro.forming = false;
+    intro.done = false; // sigue en frame()
   };
   /* Los navegadores solo dejan arrancar un audio dentro de un gesto del visitante. Si alguno quedó
      sin arrancar (se entró con scroll, o el disco B se sumó a la mezcla más tarde), el próximo
@@ -913,21 +1015,19 @@
   } else {
     gated.forEach(node => { node.inert = true; });
     setTransport('pause');
-    if (reduce) {
-      shape(1);
-      root.classList.add('is-forming', 'is-ready');
-    } else {
-      shape(0);
-      intro.done = false; // sigue en frame()
-    }
-    const button = $('[data-enter]', hero);
-    if (button) button.addEventListener('click', enter);
-    // nadie queda trabado en la bienvenida: scroll, flechas o Escape también entran
-    addEventListener('wheel', e => { if (e.deltaY > 0) enter(); }, { passive: true });
-    addEventListener('touchmove', enter, { passive: true });
+    shape(0);
+    centreRig();
+    // el botón aparece un cuadro después, para que entre en fundido
+    requestAnimationFrame(() => { if (!entered) root.classList.add('is-ready'); });
+    if (playButton) playButton.addEventListener('click', () => enter(true));
+    // nadie queda trabado en la bienvenida: scroll, flechas o Escape también entran.
+    // Un dedo que arrastra un disco no cuenta (está jugando con la consola), ni uno que resbala
+    // sobre el botón (lo que vale ahí es el toque, que llega enseguida como clic).
+    addEventListener('wheel', e => { if (e.deltaY > 0) enter(false); }, { passive: true });
+    addEventListener('touchmove', e => { if (!(e.target instanceof Element && e.target.closest('.vinyl, [data-enter]'))) enter(false); }, { passive: true });
     addEventListener('keydown', e => {
       if (entered) return;
-      if (['ArrowDown', 'PageDown', 'End', 'Escape'].includes(e.key)) enter();
+      if (['ArrowDown', 'PageDown', 'End', 'Escape'].includes(e.key)) enter(false);
     });
   }
 

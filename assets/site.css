@@ -43,6 +43,9 @@ html {
   text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  /* el lugar de la barra de desplazamiento queda reservado también en la bienvenida (que no tiene
+     scroll): si no, al aparecer el sitio la página se angosta y el logo recién armado da un salto */
+  scrollbar-gutter: stable;
 }
 body {
   margin: 0;
@@ -131,9 +134,19 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .wordmark--stacked .vinyl__glint { stroke-width: 4; }
 .wordmark--stacked .vinyl__edge { stroke-width: 6; }
 .wordmark--stacked .vinyl__edge--in { stroke-width: 4.2; }
-/* la bandeja de la bienvenida, dibujada en línea alrededor de los platos */
-.rig { fill: none; stroke: #fff; stroke-opacity: 0.45; stroke-width: 1.2; opacity: 0; transition: opacity 0.7s var(--ease); }
+/* la consola de la bienvenida, dibujada en línea alrededor de los platos (la arma console.js) */
+.rig { fill: none; stroke: #fff; stroke-opacity: 0.45; stroke-width: 1.2; opacity: 0; pointer-events: none; transition: opacity 0.9s ease; }
+.rig--top { stroke-opacity: 0.85; }                           /* los brazos, por encima de los discos: más marcados para que no se pierdan entre los surcos */
+.rig__cap { fill: var(--ink); }                               /* perillas de fader y pivote: tapan la línea que pasa por detrás */
+.rig__arm { stroke-width: 1.8; }
+.rig__heavy { stroke-width: 3.4; stroke-linecap: round; }     /* cápsula, contrapeso y segmentos del vúmetro */
+.rig__dots { stroke-width: 2.6; stroke-linecap: round; }      /* los puntos del estroboscopio */
+.rig__hot { stroke: var(--pink); stroke-opacity: 0.9; }
+.rig__brand { fill: #fff; fill-opacity: 0.92; stroke: none; } /* la marca de la consola: el logotipo, en chico */
 .wordmark--stacked .rig { stroke-width: 2.4; }
+.wordmark--stacked .rig__arm { stroke-width: 3.4; }
+.wordmark--stacked .rig__heavy { stroke-width: 6.8; }
+.wordmark--stacked .rig__dots { stroke-width: 4.4; }
 
 /* ---------- pulso: compás de 4/4 a 123 BPM, acento en el primer tiempo ---------- */
 .beat {
@@ -425,8 +438,9 @@ html:not(.has-console) .screen, html:not(.has-console) .console, html:not(.has-c
 .console__clock { color: var(--muted); }
 
 /* ---------- bienvenida ----------
-   Al llegar solo se ve la bandeja; los platos se vuelven las «O» mientras el
-   logo aparece en fundido, y queda en pausa hasta que se entra con play. */
+   Al llegar se ve una consola de DJ en pausa y el botón de PLAY (is-ready).
+   Al apretarlo (is-forming) la consola se desvanece, los platos se vuelven
+   las «O» y el logo aparece en fundido; después llega el sitio (is-live). */
 html.is-welcome { overflow: hidden; }
 .screen, .hero__tag, .console, .hero__row, .hero__reg { transition: opacity 0.9s var(--ease); }
 .is-welcome .top, .is-welcome .screen, .is-welcome .hero__tag, .is-welcome .console, .is-welcome .hero__row, .is-welcome .hero__reg { opacity: 0; pointer-events: none; }
@@ -460,6 +474,9 @@ html.is-welcome { overflow: hidden; }
 .enter:hover, .enter:focus-visible { scale: 1.04; }
 .enter:hover svg, .enter:focus-visible svg { transform: translateX(0.07em); }
 .is-welcome.is-ready .enter { opacity: 1; visibility: visible; }
+/* con menos movimiento no hay viaje de la consola al logo: la marca se funde a negro y vuelve ya
+   convertida (el fundido está al final, junto a las reglas de menos movimiento) */
+.is-dipping .hero__mark { opacity: 0; }
 
 /* ---------- cinta ---------- */
 .ticker { overflow: hidden; padding-block: clamp(0.9rem, 1.7vw, 1.5rem); }
@@ -763,4 +780,10 @@ html.is-welcome { overflow: hidden; }
   }
   html:not(.force-motion) .beat { animation: none; }
   html:not(.force-motion) .ticker__run { animation: none; }
+  /* Lo único que se anima igual: el fundido con el que la consola de la bienvenida pasa a ser el
+     logo y aparece el inicio. Nada se desplaza. */
+  html:not(.force-motion) .hero__mark, html:not(.force-motion) .screen, html:not(.force-motion) .hero__tag,
+  html:not(.force-motion) .console, html:not(.force-motion) .hero__row, html:not(.force-motion) .hero__reg {
+    transition: opacity 0.3s ease !important;
+  }
 }
