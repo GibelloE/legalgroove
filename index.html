@@ -188,9 +188,14 @@
         </div>
       </div>
 
-      <!-- bienvenida: una consola de DJ (la dibuja console.js sobre el logo) y este botón grande de PLAY,
-           que arranca la música y transforma la consola en el logo -->
-      <button class="enter" type="button" data-enter aria-label="Play: entrar al sitio" data-i18n-attr="aria-label:enter.label"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 0.5l8 4.5-8 4.5z"/></svg><span>Play</span></button>
+      <!-- bienvenida: una consola de DJ (la dibuja console.js sobre el logo), quién está detrás de la marca
+           y el botón grande de PLAY, que arranca la música y transforma la consola en el logo.
+           El enlace de abajo entra igual, pero deja la música en pausa. -->
+      <p class="ident mono"><span class="ident__name">Vanina Iud Novillo</span> <span data-i18n="foot.role">Abogada y Agente de la Propiedad Industrial</span></p>
+      <div class="gate">
+        <button class="enter" type="button" data-enter aria-label="Play: entrar al sitio" data-i18n-attr="aria-label:enter.label"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 0.5l8 4.5-8 4.5z"/></svg><span>Play</span></button>
+        <button class="gate__skip mono" type="button" data-enter-quiet><span data-i18n="enter.quiet">Entrar sin música</span> <span class="arrow" aria-hidden="true">→</span></button>
+      </div>
 
       <div class="hero__row">
         <h1 class="hero__title" data-i18n="hero.title">Derecho para tu proyecto creativo.</h1>

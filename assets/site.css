@@ -391,7 +391,7 @@ main, .foot { opacity: var(--lang-fade, 1); }
 
 /* ---------- consola: pantalla arriba del logo, controles debajo ----------
    Sin console.js no hay nada que mostrar ni que tocar. */
-html:not(.has-console) .screen, html:not(.has-console) .console, html:not(.has-console) .enter { display: none; }
+html:not(.has-console) .screen, html:not(.has-console) .console, html:not(.has-console) .gate, html:not(.has-console) .ident { display: none; }
 .has-console .top .beat { animation: none; } /* el pulso lo marca la consola */
 
 .screen { display: grid; gap: 0.3rem; width: min(100%, 34rem); }
@@ -438,9 +438,10 @@ html:not(.has-console) .screen, html:not(.has-console) .console, html:not(.has-c
 .console__clock { color: var(--muted); }
 
 /* ---------- bienvenida ----------
-   Al llegar se ve una consola de DJ en pausa y el botón de PLAY (is-ready).
-   Al apretarlo (is-forming) la consola se desvanece, los platos se vuelven
-   las «O» y el logo aparece en fundido; después llega el sitio (is-live). */
+   Al llegar se ve una consola de DJ en pausa, quién está detrás de la marca
+   y el botón de PLAY (is-ready). Al apretarlo (is-forming) la consola se
+   desvanece, los platos se vuelven las «O» y el logo aparece en fundido;
+   después llega el sitio (is-live). */
 html.is-welcome { overflow: hidden; }
 .screen, .hero__tag, .console, .hero__row, .hero__reg { transition: opacity 0.9s var(--ease); }
 .is-welcome .top, .is-welcome .screen, .is-welcome .hero__tag, .is-welcome .console, .is-welcome .hero__row, .is-welcome .hero__reg { opacity: 0; pointer-events: none; }
@@ -448,22 +449,27 @@ html.is-welcome { overflow: hidden; }
 .is-welcome.is-forming .rig { opacity: 0; }
 .wordmark .lg-l { transition: opacity 1.3s ease 0.7s; } /* las letras llegan cuando los platos ya van en camino */
 .is-welcome:not(.is-forming) .wordmark .lg-l { opacity: 0; transition: none; }
-/* el botón de entrada: un PLAY grande, en paralelogramo como el resto de los botones.
-   Va fijo a la ventana (no al alto del inicio): con el scroll bloqueado tiene que
-   quedar siempre a la vista, también en pantallas bajas. */
-.enter {
+/* La entrada: abajo y al centro, el PLAY grande y, debajo, el enlace para entrar sin música.
+   Va fija a la ventana (no al alto del inicio): con el scroll bloqueado tiene que quedar
+   siempre a la vista, también en pantallas bajas. */
+.gate {
   position: fixed; z-index: 5; left: 50%; translate: -50% 0;
-  bottom: clamp(0.75rem, 18vh - 5rem, 5.5rem);
-  bottom: clamp(0.75rem, 18svh - 5rem, 5.5rem);
-  isolation: isolate;
+  bottom: clamp(0.5rem, 18vh - 7rem, 3.5rem);
+  bottom: clamp(0.5rem, 18svh - 7rem, 3.5rem);
+  display: grid; justify-items: center; gap: 0.35rem;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.6s var(--ease), visibility 0.6s;
+}
+/* el PLAY, en paralelogramo como el resto de los botones */
+.enter {
+  position: relative; isolation: isolate;
   display: inline-flex; align-items: center; gap: 0.36em;
   padding: 0.3em 0.78em 0.3em 0.62em;
   font-family: var(--ff-display); font-stretch: 56%; font-weight: 750; font-style: italic;
   font-size: clamp(2.75rem, 6.2vw, 4.75rem); line-height: 1; letter-spacing: 0.01em; text-transform: uppercase;
   font-size: min(clamp(2.75rem, 6.2vw, 4.75rem), 11svh); /* en pantallas bajas se achica para no pisar el logo */
   color: var(--ink);
-  opacity: 0; visibility: hidden;
-  transition: opacity 0.6s var(--ease), visibility 0.6s, scale 0.25s var(--ease);
+  transition: scale 0.25s var(--ease);
 }
 .enter::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
@@ -473,7 +479,37 @@ html.is-welcome { overflow: hidden; }
 .enter svg { width: 0.44em; fill: var(--pink); transition: transform 0.3s var(--ease); }
 .enter:hover, .enter:focus-visible { scale: 1.04; }
 .enter:hover svg, .enter:focus-visible svg { transform: translateX(0.07em); }
-.is-welcome.is-ready .enter { opacity: 1; visibility: visible; }
+/* entrar sin música: la misma transformación, con todo en pausa. Sin archivos de música no hace falta. */
+.gate__skip {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  padding: 0.55rem 0.5rem; white-space: nowrap;
+  color: var(--muted); transition: color 0.2s;
+}
+.gate__skip > :first-child { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.4em; }
+.gate__skip .arrow { display: inline-block; transition: transform 0.3s var(--ease), color 0.2s; }
+.gate__skip:hover, .gate__skip:focus-visible { color: #fff; }
+.gate__skip:hover .arrow, .gate__skip:focus-visible .arrow { transform: translateX(0.3em); color: var(--pink); }
+.no-audio .gate__skip { display: none; }
+/* en pantallas bajas y anchas (un celular acostado, una notebook chica) no hay alto para
+   apilarlos: el enlace va al costado del PLAY, que sigue centrado */
+@media (max-height: 700px) and (min-width: 600px) {
+  .gate { bottom: 0.75rem; }
+  .gate__skip { position: absolute; left: calc(100% + 1.25rem); top: 50%; translate: 0 -50%; }
+}
+/* quién está detrás de la marca: arriba, donde después va la barra del sitio */
+.ident {
+  position: fixed; z-index: 5; left: 50%; translate: -50% 0;
+  top: clamp(1rem, 4vh, 1.75rem);
+  top: clamp(1rem, 4svh, 1.75rem);
+  width: max-content; max-width: calc(100% - 2 * var(--pad));
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.15rem 1rem;
+  text-align: center; color: var(--muted); pointer-events: none;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.6s var(--ease), visibility 0.6s;
+}
+.ident span { text-wrap: balance; } /* si el título no entra en un renglón, que se parta parejo */
+.ident__name { color: #fff; }
+.is-welcome.is-ready .gate, .is-welcome.is-ready .ident { opacity: 1; visibility: visible; }
 
 /* ---------- cinta ---------- */
 .ticker { overflow: hidden; padding-block: clamp(0.9rem, 1.7vw, 1.5rem); }

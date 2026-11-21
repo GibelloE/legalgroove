@@ -44,6 +44,7 @@
 
       'hero.mark': 'Legal Groove, registered trademark',
       'enter.label': 'Play: enter the site',
+      'enter.quiet': 'Enter without music',
       'con.label': 'Console',
       'con.play': 'Play',
       'con.pause': 'Pause',

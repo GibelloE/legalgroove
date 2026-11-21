@@ -432,9 +432,10 @@
   /* Dónde va la consola de la bienvenida. De lado a lado, centrada en la ventana y no en el logo
      (que deja a su derecha el lugar de la ®): así queda alineada con el botón de PLAY. De arriba
      abajo, en el lugar del logo, salvo en pantallas bajas, donde sube lo necesario para no quedar
-     pegada al botón. Se acomoda solo mientras está quieta; una vez que empieza a transformarse,
-     los platos ya salieron de ahí. */
+     pegada al botón (sin llegar a pisar el nombre que va arriba). Se acomoda solo mientras está
+     quieta; una vez que empieza a transformarse, los platos ya salieron de ahí. */
   const playButton = $('[data-enter]', hero);
+  const ident = $('.ident', hero);
   function centreRig() {
     if (morph !== 0) return;
     let moved = false;
@@ -448,7 +449,8 @@
       let lift = 0;
       if (playButton) {
         const room = playButton.getBoundingClientRect().top - Math.max(20, 0.12 * (bottom - top));
-        lift = clamp(bottom - room, 0, Math.max(0, top - 10));
+        const head = ident && ident.offsetHeight ? ident.getBoundingClientRect().bottom + 10 : 10; // hasta dónde puede subir
+        lift = clamp(bottom - room, 0, Math.max(0, top - head));
       }
       const dy = -lift / s;
       if (Math.abs(dx - inst.dx) < 0.5 && Math.abs(dy - inst.dy) < 0.5) return;
@@ -981,17 +983,20 @@
   };
   /* La transformación de la consola en logo se ve animada siempre, también cuando el sistema pide
      menos movimiento: así se decidió para este sitio (mientras dura, la clase is-intro levanta en
-     site.css el freno a las animaciones). Lo que no se mueve solo con esa preferencia es lo demás:
-     los discos no derivan en la bienvenida y, si se entra sin apretar PLAY (scroll, teclado), el
-     sitio queda en pausa. `played`: se entró con el botón de PLAY, que es un pedido expreso de
-     reproducir; ahí la música suena y los discos giran en cualquier caso. */
-  const enter = played => {
+     site.css el freno a las animaciones). Lo que cambia según cómo se entró (`how`) es si suena:
+     - 'play': el botón grande. Es un pedido expreso de reproducir: la música suena y los discos
+       giran en cualquier caso.
+     - 'quiet': el enlace «entrar sin música». Todo queda en pausa, con las pistas ya cargadas en
+       pantalla, listo para darle play desde la consola.
+     - 'other': scroll o teclado. Arranca sonando, salvo que el sistema pida menos movimiento
+       (con esa preferencia nada se mueve solo: tampoco derivan los discos en la bienvenida). */
+  const enter = how => {
     if (entered) return;
     entered = true;
-    root.classList.remove('is-ready'); // el botón se va
-    setTransport(played || !reduce ? 'play' : 'pause');
-    prime();
-    intro.from = intro.t + (played ? HOLD : 0);
+    root.classList.remove('is-ready'); // el botón, el enlace y el nombre se van
+    setTransport(how === 'play' || (how === 'other' && !reduce) ? 'play' : 'pause');
+    prime(); // en pausa no reproduce nada: deja armado el audio y trae las ondas
+    intro.from = intro.t + (how === 'play' ? HOLD : 0);
     intro.forming = false;
     intro.done = false; // sigue en frame()
   };
@@ -1016,15 +1021,17 @@
     centreRig();
     // el botón aparece un cuadro después, para que entre en fundido
     requestAnimationFrame(() => { if (!entered) root.classList.add('is-ready'); });
-    if (playButton) playButton.addEventListener('click', () => enter(true));
+    if (playButton) playButton.addEventListener('click', () => enter('play'));
+    const quietButton = $('[data-enter-quiet]', hero);
+    if (quietButton) quietButton.addEventListener('click', () => enter('quiet'));
     // nadie queda trabado en la bienvenida: scroll, flechas o Escape también entran.
     // Un dedo que arrastra un disco no cuenta (está jugando con la consola), ni uno que resbala
-    // sobre el botón (lo que vale ahí es el toque, que llega enseguida como clic).
-    addEventListener('wheel', e => { if (e.deltaY > 0) enter(false); }, { passive: true });
-    addEventListener('touchmove', e => { if (!(e.target instanceof Element && e.target.closest('.vinyl, [data-enter]'))) enter(false); }, { passive: true });
+    // sobre el botón o el enlace (lo que vale ahí es el toque, que llega enseguida como clic).
+    addEventListener('wheel', e => { if (e.deltaY > 0) enter('other'); }, { passive: true });
+    addEventListener('touchmove', e => { if (!(e.target instanceof Element && e.target.closest('.vinyl, .gate'))) enter('other'); }, { passive: true });
     addEventListener('keydown', e => {
       if (entered) return;
-      if (['ArrowDown', 'PageDown', 'End', 'Escape'].includes(e.key)) enter(false);
+      if (['ArrowDown', 'PageDown', 'End', 'Escape'].includes(e.key)) enter('other');
     });
   }
 
