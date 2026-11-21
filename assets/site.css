@@ -124,7 +124,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .vinyl__edge--in { stroke-width: 2.2; }
 /* el corazón del disco: aro, figura y recortes (se ve por el hueco, detrás del cuerpo) */
 .vinyl__ring { fill: none; stroke: var(--pink); stroke-width: 4.5; }
-.vinyl__mark { fill: var(--pink); }
+.vinyl__mark { fill: #fff; } /* la figura va en blanco; el rosa queda solo en el aro */
 .vinyl__cut { fill: var(--ink); }
 /* por dónde se agarra: en pantallas táctiles es más grande que el disco (console.js) y el dedo que cae ahí mueve el disco, no la página */
 .vinyl__hit { fill: transparent; cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent; }
