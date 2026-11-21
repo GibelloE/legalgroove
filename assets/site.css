@@ -522,8 +522,12 @@ html.is-welcome { overflow: hidden; }
   content: ""; width: 0.15em; height: 0.15em; margin-left: 0.3em;
   border-radius: 50%; background: var(--pink);
 }
-/* el contenido está duplicado: al llegar a la mitad vuelve a empezar sin salto */
-@keyframes ticker { to { transform: translateX(-50%); } }
+/* la frase está cuatro veces: cuando avanzó una (un cuarto del total) vuelve a empezar sin salto */
+@keyframes ticker { to { transform: translateX(-25%); } }
+/* en el teléfono entra menos texto a la vez: ahí pasa más rápido, para que la frase se llegue a leer */
+@media (max-width: 640px) {
+  .ticker__run { animation-duration: 20s; }
+}
 
 /* ---------- secciones ---------- */
 .sec { padding-block: clamp(5rem, 11vw, 9.5rem); }
@@ -816,5 +820,9 @@ html.is-welcome { overflow: hidden; }
     transition-delay: 0s !important;
   }
   html:not(.force-motion) .beat { animation: none; }
-  html:not(.force-motion) .ticker__run { animation: none; }
+  /* la cinta, quieta: como no se desplaza, muestra la frase entera y centrada, en los renglones que
+     haga falta y con una letra que deje entrar cada tramo (las copias de más se ocultan) */
+  html:not(.force-motion) .ticker__run { animation: none; width: auto; flex-wrap: wrap; justify-content: center; row-gap: 0.12em; padding-inline: var(--pad); }
+  html:not(.force-motion) .ticker__run span { font-size: min(6.1vw, 6rem); }
+  html:not(.force-motion) .ticker__run span:nth-child(n + 4) { display: none; }
 }

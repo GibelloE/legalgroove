@@ -57,13 +57,10 @@
       'hero.cta': 'Tell me about your project',
       'hero.services': 'See services',
 
-      'ticker.sr': 'Compose it, record it, sign it, register it, release it, collect it.',
-      'ticker.1': 'Compose it',
-      'ticker.2': 'Record it',
-      'ticker.3': 'Sign it',
-      'ticker.4': 'Register it',
-      'ticker.5': 'Release it',
-      'ticker.6': 'Collect it',
+      'ticker.sr': 'The law firm that protects your music, your brand and your contracts.',
+      'ticker.1': 'The law firm that protects your music',
+      'ticker.2': 'your brand',
+      'ticker.3': 'and your contracts',
 
       'svc.idx': '01 — Services',
       'svc.title': 'Trademarks, music and contracts.',
